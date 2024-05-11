@@ -44,4 +44,4 @@ const ScrollToTop = (props: ScrollToTopProps) => {
   )
 }
 
-export default ScrollToTop
+export { ScrollToTop }

@@ -19,7 +19,7 @@ import themeConfig from 'src/configs/themeConfig'
 
 // ** Types
 import { NavLink } from 'src/@core/layouts/types'
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from 'src/context/settingsContext'
 
 // ** Custom Components Imports
 import UserIcon from 'src/icons/UserIcon'

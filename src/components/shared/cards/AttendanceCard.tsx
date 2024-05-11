@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import ReactApexcharts from 'src/@core/components/react-apexcharts'
+import { ReactApexcharts } from 'src/components'
 import { FormControl, MenuItem, Select } from '@mui/material'
 
 const chartLabels = [

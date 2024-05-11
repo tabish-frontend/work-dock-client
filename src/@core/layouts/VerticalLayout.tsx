@@ -18,7 +18,7 @@ import { LayoutProps } from 'src/@core/layouts/types'
 // ** Components
 import AppBar from './components/vertical/appBar'
 import Navigation from './components/vertical/navigation'
-import ScrollToTop from 'src/@core/components/scroll-to-top'
+import { ScrollToTop } from 'src/components'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
@@ -82,6 +82,9 @@ const VerticalLayout = (props: LayoutProps) => {
             sx={{
               ...(contentWidth === 'boxed' && {
                 mx: 'auto',
+
+                // '@media (min-width:1440px)': { maxWidth: 1600 },
+
                 '@media (min-width:1440px)': { maxWidth: 1440 },
                 '@media (min-width:1200px)': { maxWidth: '100%' }
               })

@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 // ** Type Import
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from 'src/context/settingsContext'
 
 // ** Configs
 import themeConfig from 'src/configs/themeConfig'
