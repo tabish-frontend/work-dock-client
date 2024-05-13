@@ -18,14 +18,14 @@ import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButto
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Types
-import { NavLink } from 'src/@core/layouts/types'
+import { NavLink } from 'src/layouts/dashboard/types'
 import { Settings } from 'src/context/settingsContext'
 
 // ** Custom Components Imports
 import UserIcon from 'src/icons/UserIcon'
 
 // ** Utils
-import { handleURLQueries } from 'src/@core/layouts/utils'
+import { handleURLQueries } from 'src/layouts/dashboard/utils'
 
 interface Props {
   item: NavLink

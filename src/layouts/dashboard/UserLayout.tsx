@@ -7,10 +7,10 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 
 // ** Layout Imports
 // !Do not remove this Layout import
-import VerticalLayout from 'src/@core/layouts/VerticalLayout'
+import VerticalLayout from 'src/layouts/dashboard/VerticalLayout'
 
 // ** Navigation Imports
-import VerticalNavItems from 'src/navigation/vertical'
+import VerticalNavItems from 'src/layouts/dashboard/navigation/config.ts'
 
 // ** Component Import
 // import UpgradeToProButton from './components/UpgradeToProButton'
@@ -44,7 +44,7 @@ const UserLayout = ({ children }: Props) => {
       saveSettings={saveSettings}
       verticalNavItems={VerticalNavItems()} // Navigation Items
       verticalAppBarContent={(
-        props // AppBar Content
+        props: { toggleNavVisibility: () => void } // AppBar Content
       ) => (
         <VerticalAppBarContent
           hidden={hidden}

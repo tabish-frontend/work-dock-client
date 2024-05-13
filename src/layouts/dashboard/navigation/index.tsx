@@ -11,7 +11,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // ** Type Import
 import { Settings } from 'src/context/settingsContext'
-import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { VerticalNavItemsType } from 'src/layouts/dashboard/types'
 
 // ** Component Imports
 import Drawer from './Drawer'

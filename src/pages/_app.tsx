@@ -16,7 +16,7 @@ import themeConfig from 'src/configs/themeConfig'
 
 // ** Component Imports
 import UserLayout from 'src/layouts/dashboard/UserLayout'
-import ThemeComponent from 'src/@core/theme/ThemeComponent'
+import ThemeComponent from 'src/theme/ThemeComponent'
 
 // ** Contexts
 import { SettingsConsumer, SettingsProvider } from 'src/context/settingsContext'

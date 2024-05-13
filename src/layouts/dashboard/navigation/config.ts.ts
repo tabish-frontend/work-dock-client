@@ -13,7 +13,7 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 // import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 
 // ** Type import
-import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { VerticalNavItemsType } from 'src/layouts/dashboard/types'
 
 const navigation = (): VerticalNavItemsType => {
   return [

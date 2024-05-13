@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid'
 import { PerformanceCard, AttendanceCard, WelcomeCard, TimeLogCard } from 'src/components'
 
 // ** Styled Component Import
-import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+import ApexChartWrapper from 'src/layouts/dashboard/libs/react-apexcharts'
 
 export const Overview = () => {
   return (

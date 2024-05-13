@@ -33,7 +33,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
-import BlankLayout from 'src/@core/layouts/BlankLayout'
+import BlankLayout from 'src/layouts/dashboard/BlankLayout'
 
 // ** Demo Imports
 

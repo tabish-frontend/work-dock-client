@@ -13,15 +13,15 @@ import ArrowUp from 'mdi-material-ui/ArrowUp'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from 'src/layouts/dashboard/types'
 
 // ** Components
-import AppBar from './components/vertical/appBar'
-import Navigation from './components/vertical/navigation'
+import AppBar from 'src/layouts/dashboard/appBar'
+import Navigation from 'src/layouts/dashboard/navigation/index'
 import { ScrollToTop } from 'src/components'
 
 // ** Styled Component
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import DatePickerWrapper from 'src/layouts/dashboard/libs/react-datepicker'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
