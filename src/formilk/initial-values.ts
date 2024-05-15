@@ -1,4 +1,4 @@
-import { Employee, Login } from 'src/types'
+import { Login } from 'src/types'
 
 export const LoginInitialValues: Login = {
   email: 'johndoe',
