@@ -18,6 +18,7 @@ import VerticalAppBarContent from './AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/hooks'
+import { Guard } from 'src/components'
 
 interface Props {
   children: ReactNode
@@ -38,24 +39,26 @@ const UserLayout = ({ children }: Props) => {
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
   return (
-    <VerticalLayout
-      hidden={hidden}
-      settings={settings}
-      saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
-      verticalAppBarContent={(
-        props: { toggleNavVisibility: () => void } // AppBar Content
-      ) => (
-        <VerticalAppBarContent
-          hidden={hidden}
-          settings={settings}
-          saveSettings={saveSettings}
-          toggleNavVisibility={props.toggleNavVisibility}
-        />
-      )}
-    >
-      {children}
-    </VerticalLayout>
+    <Guard>
+      <VerticalLayout
+        hidden={hidden}
+        settings={settings}
+        saveSettings={saveSettings}
+        verticalNavItems={VerticalNavItems()} // Navigation Items
+        verticalAppBarContent={(
+          props: { toggleNavVisibility: () => void } // AppBar Content
+        ) => (
+          <VerticalAppBarContent
+            hidden={hidden}
+            settings={settings}
+            saveSettings={saveSettings}
+            toggleNavVisibility={props.toggleNavVisibility}
+          />
+        )}
+      >
+        {children}
+      </VerticalLayout>
+    </Guard>
   )
 }
 

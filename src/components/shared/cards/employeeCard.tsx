@@ -18,6 +18,7 @@ import Twitter from 'mdi-material-ui/Twitter'
 import Facebook from 'mdi-material-ui/Facebook'
 import Linkedin from 'mdi-material-ui/Linkedin'
 import GooglePlus from 'mdi-material-ui/GooglePlus'
+import { Employee } from 'src/types'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -31,7 +32,7 @@ const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
     borderRight: `1px solid ${theme.palette.divider}`
   }
 }))
-export const EmployeeCard = () => {
+export const EmployeeCard = ({ employee }: { employee: Employee }) => {
   // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -73,9 +74,9 @@ export const EmployeeCard = () => {
         >
           <CardContent>
             <Typography variant='h6' sx={{ marginBottom: 2 }}>
-              M. Zain Ahsan
+              {employee.full_name}
             </Typography>
-            <Button style={{ backgroundColor: '#EEE5FF', padding: 5 }}>Web & App Developer</Button>
+            <Button style={{ backgroundColor: '#EEE5FF', padding: 5 }}>{employee.designation.join(',')}</Button>
             <Typography variant='body2' sx={{ marginBottom: 3.5, marginTop: 3.5 }}>
               Apple iPhone 11 Pro smartphone. Announced Sep 2019. Features 5.8″ display Apple A13 Bionic
             </Typography>

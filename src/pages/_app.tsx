@@ -15,7 +15,6 @@ import type { EmotionCache } from '@emotion/cache'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Component Imports
-import UserLayout from 'src/layouts/dashboard/UserLayout'
 import ThemeComponent from 'src/theme/ThemeComponent'
 
 // ** Contexts
@@ -29,6 +28,10 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import Toaster from 'src/components/shared/toaster'
+import { AuthConsumer, AuthProvider } from 'src/context/auth'
+import { SplashScreen } from 'src/components'
+import UserLayout from 'src/layouts/dashboard/UserLayout'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -73,7 +76,28 @@ const App = (props: ExtendedAppProps) => {
       <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+            return (
+              <AuthProvider>
+                <AuthConsumer>
+                  {auth => {
+                    const showSlashScreen = !auth.isInitialized
+
+                    return (
+                      <ThemeComponent settings={settings}>
+                        {showSlashScreen ? (
+                          <SplashScreen />
+                        ) : (
+                          <>
+                            {getLayout(<Component {...pageProps} />)}
+                            <Toaster />
+                          </>
+                        )}
+                      </ThemeComponent>
+                    )
+                  }}
+                </AuthConsumer>
+              </AuthProvider>
+            )
           }}
         </SettingsConsumer>
       </SettingsProvider>

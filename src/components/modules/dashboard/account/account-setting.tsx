@@ -23,6 +23,7 @@ import { TabSecurity } from './tabs'
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
+import { useGetResponse } from 'src/hooks'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -47,15 +48,17 @@ export const AccountSettings = () => {
   const { tab } = router.query
 
   // ** State
-  const [value, setValue] = useState<string | string[]>(tab ? tab : 'account')
+
+  const [tabValue, setTabValue] = useState<string | string[]>(tab ? tab : 'account')
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue)
+    setTabValue(newValue)
   }
+  const { response } = useGetResponse('/users/me')
 
   return (
     <Card>
-      <TabContext value={value as string}>
+      <TabContext value={tabValue as string}>
         <TabList
           onChange={handleChange}
           aria-label='account-settings tabs'
@@ -91,13 +94,34 @@ export const AccountSettings = () => {
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount />
+          <TabAccount
+            userDetails={{
+              _id: response._id || '',
+              avatar: response.avatar || '',
+              email: response.email || '',
+              full_name: response.full_name || '',
+              username: response.full_name || '',
+              designation: response.designation || [],
+              qualification: response.qualification || '',
+              company: response.company || ''
+            }}
+          />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
           <TabSecurity />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
+          <TabInfo
+            userInfo={{
+              _id: response._id || '',
+              bio: response.bio || '',
+              mobile: response.mobile || '',
+              dob: response.dob || '',
+              country: response.country || '',
+              gender: response.gender || '',
+              languages: response.language || []
+            }}
+          />
         </TabPanel>
       </TabContext>
     </Card>

@@ -21,12 +21,25 @@ import DatePicker from 'react-datepicker'
 
 // ** Styled Components
 import DatePickerWrapper from 'src/layouts/dashboard/libs/react-datepicker'
+import { HumanResourceInfo } from 'src/types'
+import { useFormik } from 'formik'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
 })
 
-export const TabInfo = () => {
+export const TabInfo = ({ userInfo }: { userInfo: HumanResourceInfo }) => {
+  const formik = useFormik({
+    initialValues: userInfo,
+    enableReinitialize: true,
+    onSubmit: async (values, helpers): Promise<void> => {
+      console.log({
+        values,
+        helpers
+      })
+    }
+  })
+
   // ** State
   const [date, setDate] = useState<Date | null | undefined>(null)
 
@@ -40,8 +53,9 @@ export const TabInfo = () => {
               multiline
               label='Bio'
               minRows={2}
-              placeholder='Bio'
-              defaultValue='The name’s John Deo. I am a tireless seeker of knowledge, occasional purveyor of wisdom and also, coincidentally, a graphic designer. Algolia helps businesses across industries quickly create relevant 😎, scalable 😀, and lightning 😍 fast search and discovery experiences.'
+              placeholder='Add Bio'
+              name='bio'
+              value={formik.values.bio}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -51,6 +65,7 @@ export const TabInfo = () => {
                 showYearDropdown
                 showMonthDropdown
                 id='account-settings-date'
+                value={formik.values.dob}
                 placeholderText='MM-DD-YYYY'
                 customInput={<CustomInput />}
                 onChange={(date: Date) => setDate(date)}
@@ -58,7 +73,14 @@ export const TabInfo = () => {
             </DatePickerWrapper>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth type='number' label='Phone' placeholder='(123) 456-7890' />
+            <TextField
+              fullWidth
+              type='number'
+              label='Phone'
+              value={formik.values.mobile}
+              name='mobile'
+              placeholder='(123) 456-7890'
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -71,11 +93,11 @@ export const TabInfo = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Country</InputLabel>
-              <Select label='Country' defaultValue='USA'>
+              <Select label='Country' value={formik.values.country} name='country'>
                 <MenuItem value='USA'>USA</MenuItem>
                 <MenuItem value='UK'>UK</MenuItem>
                 <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='Germany'>Germany</MenuItem>
+                <MenuItem value='pakistan'>Pakistan</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -84,7 +106,7 @@ export const TabInfo = () => {
               <InputLabel id='form-layouts-separator-multiple-select-label'>Languages</InputLabel>
               <Select
                 multiple
-                defaultValue={['English']}
+                value={formik.values.languages}
                 id='account-settings-multiple-select'
                 labelId='account-settings-multiple-select-label'
                 input={<OutlinedInput label='Languages' id='select-multiple-language' />}
@@ -102,8 +124,14 @@ export const TabInfo = () => {
           <Grid item xs={12} sm={6}>
             <FormControl>
               <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
-              <RadioGroup row defaultValue='male' aria-label='gender' name='account-settings-info-radio'>
-                <FormControlLabel value='male' label='Male' control={<Radio />} />
+              <RadioGroup
+                row
+                defaultValue='male'
+                aria-label='gender'
+                value={formik.values.gender}
+                name='account-settings-info-radio'
+              >
+                <FormControlLabel value='Male' label='Male' control={<Radio />} />
                 <FormControlLabel value='female' label='Female' control={<Radio />} />
                 <FormControlLabel value='other' label='Other' control={<Radio />} />
               </RadioGroup>

@@ -29,7 +29,9 @@ import BlankLayout from 'src/layouts/dashboard/BlankLayout'
 import { useFormik } from 'formik'
 import { LoginInitialValues } from 'src/formilk'
 import { PasswordField } from 'src/components'
-import axiosInstance from 'src/configs/axios'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
+import { paths } from 'src/contants/paths'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -52,36 +54,17 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 const LoginPage = () => {
   const router = useRouter()
 
+  const { signIn } = useAuth<AuthContextType>()
+
   const formik = useFormik({
     initialValues: LoginInitialValues,
     onSubmit: async (values, helpers): Promise<void> => {
-      console.log('values', values)
       try {
-        const response = await axiosInstance.post('/auth/login', values)
-
-        console.log('response', response)
-
-        // const token = response.data.data.accessToken
-        // console.log('token', token)
-
-        // const cookies = response.headers?.get('Set-Cookie');
-
-        router.push('/')
-
-        // await signIn(values.email, values.password);
-
-        // if (isMounted()) {
-        //   router.push(returnTo || paths.dashboard);
-        // }
+        await signIn(values)
+        router.push(paths.index)
       } catch (err) {
         helpers.setStatus({ success: false })
         helpers.setSubmitting(false)
-
-        // if (isMounted()) {
-        //   helpers.setStatus({ success: false });
-        //   helpers.setErrors({ submit: err.message });
-        //   helpers.setSubmitting(false);
-        // }
       }
     }
   })

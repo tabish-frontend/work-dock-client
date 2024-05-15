@@ -14,18 +14,19 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/layouts/dashboard/types'
+import { paths } from 'src/contants/paths'
 
 const navigation = (): VerticalNavItemsType => {
   return [
     {
       title: 'Dashboard',
       icon: HomeOutline,
-      path: '/'
+      path: paths.index
     },
     {
       title: 'Employees',
       icon: AccountCogOutline,
-      path: '/employees'
+      path: paths.employees
     },
     {
       title: 'Attendance',
