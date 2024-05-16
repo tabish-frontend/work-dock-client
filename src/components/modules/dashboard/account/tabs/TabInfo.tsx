@@ -1,10 +1,10 @@
 // ** React Imports
-import { forwardRef, useState } from 'react'
+import { forwardRef } from 'react'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Radio from '@mui/material/Radio'
-import Select from '@mui/material/Select'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
@@ -23,29 +23,37 @@ import DatePicker from 'react-datepicker'
 import DatePickerWrapper from 'src/layouts/dashboard/libs/react-datepicker'
 import { HumanResourceInfo } from 'src/types'
 import { useFormik } from 'formik'
+import { getChangedFields } from 'src/utils/helpers'
+import { toast } from 'react-toastify'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
 })
 
-export const TabInfo = ({ userInfo }: { userInfo: HumanResourceInfo }) => {
+interface TabInfoTypes {
+  userInfo: HumanResourceInfo
+  UpdateUser: (value: any) => void
+}
+
+export const TabInfo = ({ userInfo, UpdateUser }: TabInfoTypes) => {
   const formik = useFormik({
     initialValues: userInfo,
     enableReinitialize: true,
     onSubmit: async (values, helpers): Promise<void> => {
-      console.log({
-        values,
-        helpers
-      })
+      const updatingValues = { ...getChangedFields<HumanResourceInfo>(values, formik.initialValues) }
+      await UpdateUser(updatingValues)
+      helpers.setSubmitting(false)
+      toast.success('Information Updated')
     }
   })
 
-  // ** State
-  const [date, setDate] = useState<Date | null | undefined>(null)
+  const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
+    formik.setFieldValue('languages', event.target.value)
+  }
 
   return (
     <CardContent>
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={7}>
           <Grid item xs={12} sx={{ marginTop: 4.8 }}>
             <TextField
@@ -56,22 +64,23 @@ export const TabInfo = ({ userInfo }: { userInfo: HumanResourceInfo }) => {
               placeholder='Add Bio'
               name='bio'
               value={formik.values.bio}
+              onChange={formik.handleChange}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <DatePickerWrapper>
               <DatePicker
-                selected={date}
+                selected={formik.values.dob}
                 showYearDropdown
                 showMonthDropdown
-                id='account-settings-date'
-                value={formik.values.dob}
                 placeholderText='MM-DD-YYYY'
                 customInput={<CustomInput />}
-                onChange={(date: Date) => setDate(date)}
+                onChange={(date: Date) => formik.setFieldValue('dob', date)}
               />
             </DatePickerWrapper>
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -80,20 +89,25 @@ export const TabInfo = ({ userInfo }: { userInfo: HumanResourceInfo }) => {
               value={formik.values.mobile}
               name='mobile'
               placeholder='(123) 456-7890'
+              onChange={formik.handleChange}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label='Website'
-              placeholder='https://example.com/'
-              defaultValue='https://themeselection.com/'
+              label='Qualification'
+              name='qualification'
+              value={formik.values.qualification}
+              placeholder='Graduate'
+              onChange={formik.handleChange}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Country</InputLabel>
-              <Select label='Country' value={formik.values.country} name='country'>
+              <Select label='Country' value={formik.values.country} name='country' onChange={formik.handleChange}>
                 <MenuItem value='USA'>USA</MenuItem>
                 <MenuItem value='UK'>UK</MenuItem>
                 <MenuItem value='Australia'>Australia</MenuItem>
@@ -103,12 +117,11 @@ export const TabInfo = ({ userInfo }: { userInfo: HumanResourceInfo }) => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel id='form-layouts-separator-multiple-select-label'>Languages</InputLabel>
+              <InputLabel>Languages</InputLabel>
               <Select
                 multiple
                 value={formik.values.languages}
-                id='account-settings-multiple-select'
-                labelId='account-settings-multiple-select-label'
+                onChange={handleSelectChange}
                 input={<OutlinedInput label='Languages' id='select-multiple-language' />}
               >
                 <MenuItem value='English'>English</MenuItem>
@@ -126,23 +139,19 @@ export const TabInfo = ({ userInfo }: { userInfo: HumanResourceInfo }) => {
               <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
               <RadioGroup
                 row
-                defaultValue='male'
                 aria-label='gender'
                 value={formik.values.gender}
-                name='account-settings-info-radio'
+                name='gender'
+                onChange={formik.handleChange}
               >
                 <FormControlLabel value='Male' label='Male' control={<Radio />} />
                 <FormControlLabel value='female' label='Female' control={<Radio />} />
-                <FormControlLabel value='other' label='Other' control={<Radio />} />
               </RadioGroup>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }}>
+            <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
               Save Changes
-            </Button>
-            <Button type='reset' variant='outlined' color='secondary' onClick={() => setDate(null)}>
-              Reset
             </Button>
           </Grid>
         </Grid>

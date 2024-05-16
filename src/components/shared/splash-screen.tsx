@@ -22,13 +22,11 @@ export const SplashScreen: FC = () => (
   >
     <Box
       sx={{
-        display: 'inline-flex',
-        height: 100,
-        width: 200
+        display: 'inline-flex'
       }}
     >
       {/* <Logo color="#2B91BD" /> */}
-      <img src='/images/logos/work-dock-logo.png' alt='logo' />
+      <img src='/images/logo.png' alt='logo' width={250} />
     </Box>
   </Box>
 )

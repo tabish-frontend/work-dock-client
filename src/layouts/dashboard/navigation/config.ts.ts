@@ -31,12 +31,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Attendance',
       icon: CubeOutline,
-      path: '/attendance'
+      path: paths.attendance
     },
     {
       title: 'Leaves',
       icon: FormatLetterCase,
-      path: '#'
+      path: paths.leaves
     },
     {
       title: 'Salaries',

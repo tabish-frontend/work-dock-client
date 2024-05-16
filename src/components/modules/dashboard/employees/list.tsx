@@ -1,10 +1,12 @@
 // ** MUI Imports
+import { Button, Stack, SvgIcon } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
+import { Plus } from 'mdi-material-ui'
 import { useEffect, useState } from 'react'
 
 // ** Demo Components Imports
-
+import router from 'next/router'
 import { EmployeeCard } from 'src/components'
 import axiosInstance from 'src/configs/axios'
 import { Employee } from 'src/types'
@@ -24,9 +26,23 @@ export const EmployeeList = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12} sx={{ paddingBottom: 4 }}>
-        <Typography variant='h5' color={'#9155FD'}>
-          Employee's
-        </Typography>
+        <Stack direction={'row'} justifyContent='space-between' spacing={4}>
+          <Typography variant='h4' color={'#9155FD'}>
+            Employee's
+          </Typography>
+
+          <Button
+            onClick={() => router.push(`${router.pathname}/new`)}
+            startIcon={
+              <SvgIcon>
+                <Plus />
+              </SvgIcon>
+            }
+            variant='contained'
+          >
+            Add Employee
+          </Button>
+        </Stack>
       </Grid>
 
       {employeesList.map((employee: Employee) => (

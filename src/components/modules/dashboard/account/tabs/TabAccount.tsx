@@ -20,10 +20,13 @@ import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import Button, { ButtonProps } from '@mui/material/Button'
 
+import { getChangedFields } from 'src/utils/helpers'
+
 // ** Icons Imports
 // import Close from 'mdi-material-ui/Close'
 import { HumanResourceDetails } from 'src/types'
 import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -39,15 +42,23 @@ const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htm
   }
 }))
 
-export const TabAccount = ({ userDetails }: { userDetails: HumanResourceDetails }) => {
+interface TabAccountTypes {
+  userDetails: HumanResourceDetails
+  UpdateUser: (value: any) => void
+}
+
+export const TabAccount = ({ userDetails, UpdateUser }: TabAccountTypes) => {
   const formik = useFormik({
     initialValues: userDetails,
     enableReinitialize: true,
     onSubmit: async (values, helpers): Promise<void> => {
-      console.log({
-        values,
-        helpers
-      })
+      const updatingValues = { ...getChangedFields<HumanResourceDetails>(values, formik.initialValues) }
+
+      await UpdateUser(updatingValues)
+
+      helpers.setStatus({ success: true })
+      helpers.setSubmitting(false)
+      toast.success('Details Updated')
     }
   })
 
@@ -57,7 +68,7 @@ export const TabAccount = ({ userDetails }: { userDetails: HumanResourceDetails 
 
   return (
     <CardContent>
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={7}>
           <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -76,21 +87,37 @@ export const TabAccount = ({ userDetails }: { userDetails: HumanResourceDetails 
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Username' value={formik.values.username} name='username' />
+            <TextField
+              fullWidth
+              label='Username'
+              value={formik.values.username}
+              name='username'
+              onChange={formik.handleChange}
+            />
           </Grid>
+
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Name' value={formik.values.full_name} name='full_name' />
+            <TextField
+              fullWidth
+              label='Name'
+              value={formik.values.full_name}
+              name='full_name'
+              onChange={formik.handleChange}
+            />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               type='email'
               label='Email'
               name='email'
-              value={formik.values?.email}
+              value={formik.values.email}
               placeholder='johnDoe@example.com'
+              onChange={formik.handleChange}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Designation</InputLabel>
@@ -98,21 +125,18 @@ export const TabAccount = ({ userDetails }: { userDetails: HumanResourceDetails 
                 label='Designation'
                 multiple
                 value={formik.values.designation}
-                name='designation
-              '
+                name='designation'
                 onChange={handleSelectChange}
               >
-                <MenuItem value='hr'>Human Resource</MenuItem>
-                <MenuItem value='Software Engineer'>Software Engineer</MenuItem>
+                <MenuItem value='human resource'>Human Resource</MenuItem>
+                <MenuItem value='software engineer'>Software Engineer</MenuItem>
                 <MenuItem value='editor'>Editor</MenuItem>
                 <MenuItem value='maintainer'>Maintainer</MenuItem>
                 <MenuItem value='subscriber'>Subscriber</MenuItem>
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Qualification' value={formik.values.qualification} name='qualification' />
-          </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -120,11 +144,27 @@ export const TabAccount = ({ userDetails }: { userDetails: HumanResourceDetails 
               placeholder='Please add your company name'
               name='company'
               value={formik.values.company}
+              onChange={formik.handleChange}
             />
           </Grid>
 
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Account Status</InputLabel>
+              <Select
+                label='Account Status'
+                value={formik.values.account_status}
+                name='account_status'
+                onChange={formik.handleChange}
+              >
+                <MenuItem value='active'>Active</MenuItem>
+                <MenuItem value='pending'>Pending</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }}>
+            <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
               Save Changes
             </Button>
           </Grid>

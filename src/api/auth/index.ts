@@ -3,7 +3,7 @@ import Axios from 'src/configs/axios'
 import { Login } from 'src/types'
 
 type ChangePasswordRequest = {
-  password_current: string | null
+  current_password: string
   password: string
   password_confirm: string
 }
@@ -40,7 +40,7 @@ class AuthApi {
 
   async changePassword(body: ChangePasswordRequest) {
     try {
-      const response: { token: string } = await Axios.patch('/auth/update-my-password', body)
+      const response = await Axios.patch('/auth/updateMyPassword', body)
 
       return response
     } catch (error) {

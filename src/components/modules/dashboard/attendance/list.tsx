@@ -41,7 +41,7 @@ export const AttendanceList = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <Typography variant='h5' color={'#9155FD'}>
+        <Typography variant='h4' color={'#9155FD'}>
           Attendance List
         </Typography>
       </Grid>

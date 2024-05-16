@@ -9,6 +9,8 @@ export const paths = {
   auth,
   index: `/`,
   employees: `/employees`,
+  attendance: `/attendance`,
+  leaves: `/leaves`,
   notFound: '/404'
 
   // new_admin: `/dashboard/admins/new`,

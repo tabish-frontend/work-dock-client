@@ -13,3 +13,9 @@ export interface Login {
   email: string
   password: string
 }
+
+export interface UpdatePassword {
+  current_password: string
+  password: string
+  password_confirm: string
+}

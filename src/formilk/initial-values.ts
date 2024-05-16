@@ -1,6 +1,12 @@
-import { Login } from 'src/types'
+import { Login, UpdatePassword } from 'src/types'
 
 export const LoginInitialValues: Login = {
-  email: 'johndoe',
-  password: 'John12385'
+  email: 'yonuskhan',
+  password: 'yonus12385'
+}
+
+export const updateMyPassword: UpdatePassword = {
+  current_password: '',
+  password: '',
+  password_confirm: ''
 }

@@ -4,7 +4,7 @@ export interface HumanResourceDetails {
   full_name: string
   avatar: string
   email: string
-  qualification: string
+  account_status: string
   designation: string[]
   company: string
 }
@@ -13,15 +13,20 @@ export interface HumanResourceInfo {
   _id: string
   bio: string
   mobile: number
-  dob: string
+  dob: Date
   country: string
   languages: string[]
+  qualification: string
   gender: string
 }
 
 export interface HumanResource {
-  info: HumanResourceInfo
   _id: string
+  bio: string
+  mobile: number
+  dob: Date
+  country: string
+  languages: string[]
   username: string
   full_name: string
   role: string

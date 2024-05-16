@@ -4,9 +4,9 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 interface PasswordFieldProps {
-  formikErrors: string | undefined
-  formikTouched: boolean | undefined
-  handleBlur: <T = string>(e: T) => void
+  formikErrors?: string | undefined
+  formikTouched?: boolean | undefined
+  handleBlur?: <T = string>(e: T) => void
   handleChange: <T = string>(e: T) => void
   label: string
   name: string
