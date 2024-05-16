@@ -30,7 +30,7 @@ export const Guard: FC<AuthGuardProps> = props => {
 
   useEffect(() => {
     check()
-  }, [router])
+  }, [check, router])
 
   if (!checked) {
     return null

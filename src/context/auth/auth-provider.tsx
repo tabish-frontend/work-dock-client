@@ -176,30 +176,9 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
     [dispatch]
   )
 
-  const changePassword = useCallback(
-    async (password: string, password_confirm: string): Promise<void> => {
-      const password_current = localStorage.getItem('temporary_password')
-
-      const { token } = await authApi.changePassword({
-        password_current,
-        password,
-        password_confirm
-      })
-      localStorage.setItem(STORAGE_KEY, token)
-
-      localStorage.removeItem('temporary_password')
-
-      const user = await authApi.me()
-
-      dispatch({
-        type: ActionType.CHANGE_PSWD,
-        payload: {
-          user: user.data
-        }
-      })
-    },
-    [dispatch]
-  )
+  const changePassword = useCallback(async (): Promise<void> => {
+    //
+  }, [])
 
   const signOut = useCallback(async (): Promise<void> => {
     localStorage.removeItem(STORAGE_KEY)
