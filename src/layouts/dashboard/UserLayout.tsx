@@ -1,5 +1,6 @@
 // ** React Imports
 import { ReactNode } from 'react'
+import PropTypes from 'prop-types'
 
 // ** MUI Imports
 import { Theme } from '@mui/material/styles'
@@ -18,13 +19,13 @@ import VerticalAppBarContent from './AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/hooks'
-import { Guard } from 'src/components'
+import { AuthGuard } from 'src/components'
 
 interface Props {
   children: ReactNode
 }
 
-const UserLayout = ({ children }: Props) => {
+export const DashboardLayout = ({ children }: Props) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
 
@@ -38,28 +39,30 @@ const UserLayout = ({ children }: Props) => {
    */
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
-  return (
-    <Guard>
-      <VerticalLayout
-        hidden={hidden}
-        settings={settings}
-        saveSettings={saveSettings}
-        verticalNavItems={VerticalNavItems()} // Navigation Items
-        verticalAppBarContent={(
-          props: { toggleNavVisibility: () => void } // AppBar Content
-        ) => (
-          <VerticalAppBarContent
-            hidden={hidden}
-            settings={settings}
-            saveSettings={saveSettings}
-            toggleNavVisibility={props.toggleNavVisibility}
-          />
-        )}
-      >
-        {children}
-      </VerticalLayout>
-    </Guard>
+  const component = (
+    <VerticalLayout
+      hidden={hidden}
+      settings={settings}
+      saveSettings={saveSettings}
+      verticalNavItems={VerticalNavItems()} // Navigation Items
+      verticalAppBarContent={(
+        props: { toggleNavVisibility: () => void } // AppBar Content
+      ) => (
+        <VerticalAppBarContent
+          hidden={hidden}
+          settings={settings}
+          saveSettings={saveSettings}
+          toggleNavVisibility={props.toggleNavVisibility}
+        />
+      )}
+    >
+      {children}
+    </VerticalLayout>
   )
+
+  return <AuthGuard>{component}</AuthGuard>
 }
 
-export default UserLayout
+DashboardLayout.propTypes = {
+  children: PropTypes.node
+}

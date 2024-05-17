@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
 
 import { BlankLayoutProps } from 'src/layouts/dashboard/types'
+import { GuestGuard } from 'src/components'
 
 // Styled component for Blank Layout component
 const BlankLayoutWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -32,13 +33,15 @@ const BlankLayoutWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 export const AuthLayout: FC<BlankLayoutProps> = props => {
   const { children } = props
 
-  return (
+  const component = (
     <BlankLayoutWrapper className='layout-wrapper'>
       <Box className='app-content' sx={{ minHeight: '100vh', overflowX: 'hidden', position: 'relative' }}>
         {children}
       </Box>
     </BlankLayoutWrapper>
   )
+
+  return <GuestGuard>{component}</GuestGuard>
 }
 
 AuthLayout.propTypes = {

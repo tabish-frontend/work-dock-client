@@ -1,5 +1,4 @@
 // ** React Imports
-import { ReactNode } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -25,13 +24,14 @@ import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormCo
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
-import BlankLayout from 'src/layouts/dashboard/BlankLayout'
 import { useFormik } from 'formik'
 import { LoginInitialValues } from 'src/formilk'
 import { PasswordField } from 'src/components'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
 import { paths } from 'src/contants/paths'
+import { NextPage } from 'next'
+import { AuthLayout } from 'src/layouts/auth'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -51,7 +51,7 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
-const LoginPage = () => {
+const LoginComponent = () => {
   const router = useRouter()
 
   const { signIn } = useAuth<AuthContextType>()
@@ -136,6 +136,14 @@ const LoginPage = () => {
   )
 }
 
-LoginPage.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
+// LoginPage.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
-export { LoginPage }
+// export { LoginPage }
+
+const Login: NextPage = () => {
+  return <LoginComponent />
+}
+
+Login.getLayout = page => <AuthLayout>{page}</AuthLayout>
+
+export { Login }

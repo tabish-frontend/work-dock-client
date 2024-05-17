@@ -9,7 +9,8 @@ import type { State } from './auth-context'
 import { AuthContext, initialState } from './auth-context'
 import { User } from 'src/types'
 import { jwtDecode } from 'jwt-decode'
-import Cookies from 'js-cookie'
+
+// import Cookies from 'js-cookie'
 
 const STORAGE_KEY = 'accessToken'
 
@@ -115,10 +116,11 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
 
   const initialize = useCallback(async (): Promise<void> => {
     try {
-      const cookie = Cookies.get('accessToken')
+      const accessToken = window.localStorage.getItem(STORAGE_KEY)
 
-      if (cookie) {
-        const decodedUser: User = jwtDecode(cookie)
+      if (accessToken) {
+        const decodedUser: User = jwtDecode(accessToken)
+
         dispatch({
           type: ActionType.INITIALIZE,
           payload: {
@@ -159,6 +161,7 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
     async (body): Promise<void> => {
       const response = await authApi.signIn(body)
       const token = response?.data.accessToken
+      localStorage.setItem(STORAGE_KEY, token)
       const decodedUser: User = jwtDecode(token)
 
       dispatch({

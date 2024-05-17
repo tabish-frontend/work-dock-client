@@ -9,7 +9,11 @@ const Axios = axios.create({
 
 Axios.interceptors.request.use(
   config => {
-    // You can modify the request config here if needed
+    if (typeof document !== 'undefined' && document.cookie) {
+      // Append cookies to headers
+      config.headers.Cookie = document.cookie
+    }
+
     return config
   },
   error => {

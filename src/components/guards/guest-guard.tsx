@@ -6,23 +6,19 @@ import { useAuth } from 'src/hooks/use-auth'
 import { useRouter } from 'next/router'
 import { paths } from 'src/contants/paths'
 
-interface AuthGuardProps {
+interface GuestGuardProps {
   children: ReactNode
 }
 
-export const Guard: FC<AuthGuardProps> = props => {
+export const GuestGuard: FC<GuestGuardProps> = props => {
   const { children } = props
-  const router = useRouter()
   const { isAuthenticated } = useAuth()
+  const router = useRouter()
   const [checked, setChecked] = useState<boolean>(false)
 
   const check = useCallback(() => {
-    if (!isAuthenticated) {
-      const searchParams = new URLSearchParams({
-        returnTo: window.location.pathname
-      }).toString()
-      const href = paths.auth.login + `?${searchParams}`
-      router.replace(href)
+    if (isAuthenticated) {
+      router.replace(paths.index)
     } else {
       setChecked(true)
     }
@@ -30,7 +26,7 @@ export const Guard: FC<AuthGuardProps> = props => {
 
   useEffect(() => {
     check()
-  }, [check, router])
+  }, [])
 
   if (!checked) {
     return null
@@ -39,6 +35,6 @@ export const Guard: FC<AuthGuardProps> = props => {
   return <>{children}</>
 }
 
-Guard.propTypes = {
+GuestGuard.propTypes = {
   children: PropTypes.node
 }

@@ -1,3 +1,3 @@
-import { LoginPage } from 'src/components'
+import { Login } from 'src/components'
 
-export default LoginPage
+export default Login

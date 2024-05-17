@@ -31,7 +31,6 @@ import '../../styles/globals.css'
 import Toaster from 'src/components/shared/toaster'
 import { AuthConsumer, AuthProvider } from 'src/context/auth'
 import { SplashScreen } from 'src/components'
-import UserLayout from 'src/layouts/dashboard/UserLayout'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -59,7 +58,11 @@ const App = (props: ExtendedAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   // Variables
-  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
+  const getLayout =
+    Component.getLayout ??
+    (page => {
+      page
+    })
 
   return (
     <CacheProvider value={emotionCache}>

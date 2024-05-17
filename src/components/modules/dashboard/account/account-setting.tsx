@@ -25,6 +25,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
 import { authApi } from 'src/api/auth'
 import { HumanResource } from 'src/types'
+import { NextPage } from 'next'
+import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -44,7 +46,7 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
-export const AccountSettings = () => {
+const AccountSettingsComponent = () => {
   const router = useRouter()
   const { tab } = router.query
 
@@ -148,3 +150,11 @@ export const AccountSettings = () => {
     </Card>
   )
 }
+
+const AccountSettings: NextPage = () => {
+  return <AccountSettingsComponent />
+}
+
+AccountSettings.getLayout = page => <DashboardLayout>{page}</DashboardLayout>
+
+export { AccountSettings }
