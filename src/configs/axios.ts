@@ -9,10 +9,11 @@ const Axios = axios.create({
 
 Axios.interceptors.request.use(
   config => {
-    if (typeof document !== 'undefined' && document.cookie) {
-      // Append cookies to headers
-      config.headers.Cookie = document.cookie
-    }
+    // You can modify the request config here if needed
+
+    const token = localStorage.getItem('accessToken')
+
+    config.headers['Authorization'] = `Bearer ${token}`
 
     return config
   },

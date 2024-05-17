@@ -9,6 +9,8 @@ import CardHeader from '@mui/material/CardHeader'
 import { Paper, TableBody, TableCell, TableContainer, Table, TableRow, TableHead, Stack } from '@mui/material'
 import { CheckCircleOutline, CloseCircleOutline, ClockTimeThreeOutline } from 'mdi-material-ui'
 import { useState } from 'react'
+import { NextPage } from 'next'
+import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
 
 const employees = [
   { id: 1, name: 'Employee 1' },
@@ -23,7 +25,7 @@ const employees = [
   { id: 10, name: 'Employee 10' }
 ]
 
-export const AttendanceList = () => {
+const AttendanceListComponent = () => {
   const [attendance, setAttendance] = useState(
     employees.map(employee => {
       const days = []
@@ -104,3 +106,11 @@ export const AttendanceList = () => {
     </Grid>
   )
 }
+
+const AttendanceList: NextPage = () => {
+  return <AttendanceListComponent />
+}
+
+AttendanceList.getLayout = page => <DashboardLayout>{page}</DashboardLayout>
+
+export { AttendanceList }

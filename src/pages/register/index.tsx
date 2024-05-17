@@ -1,3 +1,3 @@
-import { RegisterPage } from 'src/components'
+import { Register } from 'src/components'
 
-export default RegisterPage
+export default Register

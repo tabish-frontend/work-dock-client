@@ -10,8 +10,10 @@ import router from 'next/router'
 import { EmployeeCard } from 'src/components'
 import axiosInstance from 'src/configs/axios'
 import { Employee } from 'src/types'
+import { NextPage } from 'next'
+import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
 
-export const EmployeeList = () => {
+const EmployeeListComponent = () => {
   const [employeesList, setEmployeesList] = useState([])
 
   const handleGetEmployees = async () => {
@@ -53,3 +55,11 @@ export const EmployeeList = () => {
     </Grid>
   )
 }
+
+const EmployeeList: NextPage = () => {
+  return <EmployeeListComponent />
+}
+
+EmployeeList.getLayout = page => <DashboardLayout>{page}</DashboardLayout>
+
+export { EmployeeList }

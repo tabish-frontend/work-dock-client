@@ -17,12 +17,14 @@ import {
   Typography
 } from '@mui/material'
 import DatePicker from 'react-datepicker'
+import { NextPage } from 'next'
+import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
 })
 
-export const CreateEmployee = () => {
+const CreateEmployeeComponent = () => {
   const [language, setLanguage] = useState<string[]>([])
   const [date, setDate] = useState<Date | null | undefined>(null)
 
@@ -213,3 +215,11 @@ export const CreateEmployee = () => {
     </Grid>
   )
 }
+
+const CreateEmployee: NextPage = () => {
+  return <CreateEmployeeComponent />
+}
+
+CreateEmployee.getLayout = page => <DashboardLayout>{page}</DashboardLayout>
+
+export { CreateEmployee }

@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Grid, { GridProps } from '@mui/material/Grid'
+import { useRouter } from 'next/router'
 
 // ** Icons Imports
 import Twitter from 'mdi-material-ui/Twitter'
@@ -33,6 +34,8 @@ const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
   }
 }))
 export const EmployeeCard = ({ employee }: { employee: Employee }) => {
+  const router = useRouter()
+
   // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -44,7 +47,7 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
   //     setAnchorEl(event.currentTarget)
   //   }
   return (
-    <Card sx={{ cursor: 'pointer' }}>
+    <Card sx={{ cursor: 'pointer' }} onClick={() => router.push(`${router.pathname}/${employee.username}`)}>
       <Grid container spacing={4}>
         <StyledGrid item md={4.5} xs={12}>
           <CardContent

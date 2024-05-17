@@ -3,8 +3,10 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import { Paper, TableBody, TableCell, TableContainer, TableHead, TableRow, Table } from '@mui/material'
 import React from 'react'
+import { NextPage } from 'next'
+import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
 
-export const LeavesList = () => {
+const LeavesListComponent = () => {
   const leaveRequests = [
     // assuming you have an array of leave requests
     {
@@ -58,3 +60,11 @@ export const LeavesList = () => {
     </Grid>
   )
 }
+
+const LeavesList: NextPage = () => {
+  return <LeavesListComponent />
+}
+
+LeavesList.getLayout = page => <DashboardLayout>{page}</DashboardLayout>
+
+export { LeavesList }

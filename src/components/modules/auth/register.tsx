@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, Fragment, ChangeEvent, MouseEvent, ReactNode } from 'react'
+import { useState, Fragment, ChangeEvent, MouseEvent } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -33,7 +33,8 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
-import BlankLayout from 'src/layouts/dashboard/BlankLayout'
+import { NextPage } from 'next'
+import { AuthLayout } from 'src/layouts/auth'
 
 // ** Demo Imports
 
@@ -62,7 +63,7 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
   }
 }))
 
-const RegisterPage = () => {
+const RegisterComponent = () => {
   // ** States
   const [values, setValues] = useState<State>({
     password: '',
@@ -248,6 +249,10 @@ const RegisterPage = () => {
   )
 }
 
-RegisterPage.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
+const Register: NextPage = () => {
+  return <RegisterComponent />
+}
 
-export { RegisterPage }
+Register.getLayout = page => <AuthLayout>{page}</AuthLayout>
+
+export { Register }

@@ -136,10 +136,6 @@ const LoginComponent = () => {
   )
 }
 
-// LoginPage.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
-
-// export { LoginPage }
-
 const Login: NextPage = () => {
   return <LoginComponent />
 }
