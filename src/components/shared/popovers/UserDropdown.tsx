@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 // ** React Imports
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, SyntheticEvent, Fragment, useCallback } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -26,6 +26,9 @@ import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
+import { ConfirmationModal } from 'src/components'
+import { paths } from 'src/contants/paths'
+import { toast } from 'react-toastify'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -37,10 +40,11 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 }))
 
 const UserDropdown = () => {
-  const { user } = useAuth<AuthContextType>()
+  const { user, signOut } = useAuth<AuthContextType>()
 
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [logoutModal, setLogoutModal] = useState(false)
 
   // ** Hooks
   const router = useRouter()
@@ -69,6 +73,15 @@ const UserDropdown = () => {
       color: 'text.secondary'
     }
   }
+
+  const handleLogout = useCallback(async (): Promise<void> => {
+    try {
+      signOut()
+      router.push(paths.auth.login)
+    } catch (err) {
+      toast.error('Something went wrong!')
+    }
+  }, [router])
 
   return (
     <Fragment>
@@ -125,11 +138,33 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/login')}>
+        <MenuItem
+          sx={{ py: 2 }}
+          onClick={() => {
+            setLogoutModal(true)
+            setAnchorEl(null)
+          }}
+        >
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>
       </Menu>
+
+      {logoutModal && (
+        <ConfirmationModal
+          warning_title={'Log Out'}
+          warning_text={'Are you sure you want to logout ?'}
+          button_text={'Log Out'}
+          modal={logoutModal}
+          onCancel={() => {
+            setLogoutModal(false)
+          }}
+          onDelete={async () => {
+            handleLogout()
+            setLogoutModal(false)
+          }}
+        />
+      )}
     </Fragment>
   )
 }

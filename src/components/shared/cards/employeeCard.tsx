@@ -1,24 +1,15 @@
 // ** React Imports
-import { useState } from 'react'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Menu from '@mui/material/Menu'
 import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import CardActions from '@mui/material/CardActions'
 import Grid, { GridProps } from '@mui/material/Grid'
 import { useRouter } from 'next/router'
 
-// ** Icons Imports
-import Twitter from 'mdi-material-ui/Twitter'
-import Facebook from 'mdi-material-ui/Facebook'
-import Linkedin from 'mdi-material-ui/Linkedin'
-import GooglePlus from 'mdi-material-ui/GooglePlus'
+// ** Types Imports
 import { Employee } from 'src/types'
 
 // Styled Grid component
@@ -36,16 +27,6 @@ const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
 export const EmployeeCard = ({ employee }: { employee: Employee }) => {
   const router = useRouter()
 
-  // ** State
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  //   const handleClick = (event: MouseEvent<HTMLElement>) => {
-  //     setAnchorEl(event.currentTarget)
-  //   }
   return (
     <Card sx={{ cursor: 'pointer' }} onClick={() => router.push(`${router.pathname}/${employee.username}`)}>
       <Grid container spacing={4}>
@@ -84,32 +65,6 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
               Apple iPhone 11 Pro smartphone. Announced Sep 2019. Features 5.8″ display Apple A13 Bionic
             </Typography>
           </CardContent>
-          <CardActions className='card-action-dense'>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <Menu
-                open={open}
-                id='long-menu'
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'long-button'
-                }}
-              >
-                <MenuItem onClick={handleClose}>
-                  <Facebook />
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Twitter />
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Linkedin />
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <GooglePlus />
-                </MenuItem>
-              </Menu>
-            </Box>
-          </CardActions>
         </Grid>
       </Grid>
     </Card>

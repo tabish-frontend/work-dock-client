@@ -8,14 +8,14 @@ import CardContent from '@mui/material/CardContent'
 
 import { PasswordField } from 'src/components/shared'
 import { useFormik } from 'formik'
-import { updateMyPassword } from 'src/formilk'
+import { UpdateMyPassword } from 'src/formilk'
 import { toast } from 'react-toastify'
 import { authApi } from 'src/api/auth'
 
 export const TabSecurity = () => {
   // ** Formik
   const formik = useFormik({
-    initialValues: updateMyPassword,
+    initialValues: UpdateMyPassword,
     enableReinitialize: true,
     onSubmit: async (values, helpers): Promise<void> => {
       await authApi.changePassword(values)

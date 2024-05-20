@@ -5,6 +5,9 @@ const input = (theme: Theme) => {
   return {
     MuiInputLabel: {
       styleOverrides: {
+        asterisk: {
+          color: '#e0142c'
+        },
         root: {
           color: theme.palette.text.secondary
         }

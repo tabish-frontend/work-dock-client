@@ -49,13 +49,13 @@ class AuthApi {
   }
 
   async forgotPassword(body: ForgotPassword) {
-    const response = await Axios.post('/forgot-password', body)
+    const response = await Axios.post('/auth/forgotPassword', body)
 
     return response
   }
 
   async resetPassword(reset_token: string | string[] | undefined, body: object) {
-    const response = await Axios.patch(`/reset-password/${reset_token}`, body)
+    const response = await Axios.patch(`/auth/resetPassword/${reset_token}`, body)
 
     return response
   }

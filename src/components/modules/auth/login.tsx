@@ -122,8 +122,8 @@ const LoginComponent = () => {
               }}
             >
               <FormControlLabel control={<Checkbox />} label='Remember Me' />
-              <Link passHref href='/'>
-                <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
+              <Link passHref href={paths.auth.forgot_password}>
+                <LinkStyled>Forgot Password?</LinkStyled>
               </Link>
             </Box>
             <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} type='submit'>

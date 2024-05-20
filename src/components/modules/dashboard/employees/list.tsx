@@ -6,19 +6,21 @@ import { Plus } from 'mdi-material-ui'
 import { useEffect, useState } from 'react'
 
 // ** Demo Components Imports
-import router from 'next/router'
 import { EmployeeCard } from 'src/components'
-import axiosInstance from 'src/configs/axios'
 import { Employee } from 'src/types'
 import { NextPage } from 'next'
 import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
+import { employeesApi } from 'src/api'
+import { useRouter } from 'next/router'
 
 const EmployeeListComponent = () => {
+  const router = useRouter()
+
   const [employeesList, setEmployeesList] = useState([])
 
   const handleGetEmployees = async () => {
-    const response = await axiosInstance.get('/employees?account_status=active')
-    setEmployeesList(response.data.users)
+    const response = await employeesApi.getEmployees()
+    setEmployeesList(response.users)
   }
 
   useEffect(() => {

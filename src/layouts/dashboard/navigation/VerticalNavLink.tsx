@@ -25,7 +25,8 @@ import { Settings } from 'src/context/settingsContext'
 import UserIcon from 'src/icons/UserIcon'
 
 // ** Utils
-import { handleURLQueries } from 'src/layouts/dashboard/utils'
+
+// import { handleURLQueries } from 'src/layouts/dashboard/utils'
 
 interface Props {
   item: NavLink
@@ -69,11 +70,15 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }: Props) => {
   const IconTag: ReactNode = item.icon
 
   const isNavLinkActive = () => {
-    if (router.pathname === item.path || handleURLQueries(router, item.path)) {
-      return true
-    } else {
-      return false
-    }
+    const checkPath = !!(router.pathname && item.path)
+
+    return checkPath ? (item.path === '/' ? router.pathname === '/' : router.pathname.includes(item.path!)) : false
+
+    // if (router.pathname === item.path || handleURLQueries(router, item.path)) {
+    //   return true
+    // } else {
+    //   return false
+    // }
   }
 
   return (
