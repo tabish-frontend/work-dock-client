@@ -182,7 +182,6 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
   )
 
   const signOut = useCallback(async (): Promise<void> => {
-    await authApi.signOut()
     localStorage.removeItem(STORAGE_KEY)
     dispatch({ type: ActionType.SIGN_OUT })
   }, [dispatch])

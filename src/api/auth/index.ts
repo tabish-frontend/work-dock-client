@@ -20,12 +20,6 @@ class AuthApi {
     } catch (error) {}
   }
 
-  async signOut() {
-    const response = await Axios.post(`/auth/logout`)
-
-    return response
-  }
-
   async forgotPassword(body: ForgotPassword) {
     const response = await Axios.post('/auth/forgotPassword', body)
 
