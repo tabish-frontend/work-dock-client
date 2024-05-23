@@ -76,7 +76,7 @@ const UserDropdown = () => {
 
   const handleLogout = useCallback(async (): Promise<void> => {
     try {
-      signOut()
+      await signOut()
       router.push(paths.auth.login)
     } catch (err) {
       toast.error('Something went wrong!')
