@@ -27,7 +27,6 @@ import { NextPage } from 'next'
 import { AuthLayout } from 'src/layouts/auth'
 import { Stack, SvgIcon } from '@mui/material'
 import { authApi } from 'src/api'
-import { toast } from 'react-toastify'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -48,7 +47,6 @@ const ForgotPasswordComponent = () => {
     onSubmit: async (values, helpers): Promise<void> => {
       try {
         await authApi.forgotPassword(values)
-        toast.success('reset password link sent to your email!')
       } catch (err) {
         helpers.setStatus({ success: false })
         helpers.setSubmitting(false)

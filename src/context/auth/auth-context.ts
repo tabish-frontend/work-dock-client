@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { Login, User } from 'src/types'
+import { Login, UpdatePassword, User } from 'src/types'
 
 export interface State {
   isInitialized: boolean
@@ -16,7 +16,7 @@ export const initialState: State = {
 export interface AuthContextType extends State {
   signIn: (body: Login) => Promise<void>
   initialize: () => Promise<void>
-  changePassword: (password: string, password_confirm: string) => Promise<void>
+  changePassword: (body: UpdatePassword) => Promise<void>
   updateCurrentUser: (user: any) => void
   signOut: () => Promise<void>
 }

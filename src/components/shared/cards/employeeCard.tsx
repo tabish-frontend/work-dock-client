@@ -60,9 +60,9 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
             <Typography variant='h6' sx={{ marginBottom: 2 }}>
               {employee.full_name}
             </Typography>
-            <Button style={{ backgroundColor: '#EEE5FF', padding: 5 }}>{employee.designation.join(',')}</Button>
+            <Button style={{ backgroundColor: '#EEE5FF', padding: 5 }}>{employee.designation}</Button>
             <Typography variant='body2' sx={{ marginBottom: 3.5, marginTop: 3.5 }}>
-              Apple iPhone 11 Pro smartphone. Announced Sep 2019. Features 5.8″ display Apple A13 Bionic
+              {employee.bio || 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime debitis autem '}
             </Typography>
           </CardContent>
         </Grid>

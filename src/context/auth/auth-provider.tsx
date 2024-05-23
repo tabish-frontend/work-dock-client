@@ -8,7 +8,6 @@ import { authApi } from 'src/api/auth'
 import type { State } from './auth-context'
 import { AuthContext, initialState } from './auth-context'
 import { User } from 'src/types'
-import { jwtDecode } from 'jwt-decode'
 
 // import Cookies from 'js-cookie'
 
@@ -119,18 +118,13 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
       const accessToken = window.localStorage.getItem(STORAGE_KEY)
 
       if (accessToken) {
-        const decodedUser: User = jwtDecode(accessToken)
+        const user = await authApi.me()
 
         dispatch({
           type: ActionType.INITIALIZE,
           payload: {
             isAuthenticated: true,
-            user: {
-              _id: decodedUser._id,
-              full_name: decodedUser.full_name,
-              username: decodedUser.username,
-              role: decodedUser.role
-            }
+            user: user.data
           }
         })
       } else {
@@ -160,40 +154,47 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
   const signIn = useCallback(
     async (body): Promise<void> => {
       const response = await authApi.signIn(body)
-      const token = response?.data.accessToken
-      localStorage.setItem(STORAGE_KEY, token)
-      const decodedUser: User = jwtDecode(token)
 
-      dispatch({
-        type: ActionType.SIGN_IN,
-        payload: {
-          user: {
-            _id: decodedUser._id,
-            full_name: decodedUser.full_name,
-            username: decodedUser.username,
-            role: decodedUser.role
+      if (response) {
+        const token = response?.data.accessToken
+        localStorage.setItem(STORAGE_KEY, token)
+
+        const user = await authApi.me()
+
+        dispatch({
+          type: ActionType.SIGN_IN,
+          payload: {
+            user: user.data
           }
-        }
-      })
+        })
+      }
     },
     [dispatch]
   )
 
-  const changePassword = useCallback(async (): Promise<void> => {
-    //
-  }, [])
+  const changePassword = useCallback(
+    async (body): Promise<void> => {
+      await authApi.changePassword(body)
+      localStorage.removeItem(STORAGE_KEY)
+      dispatch({ type: ActionType.SIGN_OUT })
+    },
+    [dispatch]
+  )
 
   const signOut = useCallback(async (): Promise<void> => {
+    await authApi.signOut()
     localStorage.removeItem(STORAGE_KEY)
     dispatch({ type: ActionType.SIGN_OUT })
   }, [dispatch])
 
   const updateCurrentUser = useCallback(
-    (user: any) => {
+    async (updatingValues): Promise<void> => {
+      const updatedUser = await authApi.update_me(updatingValues)
+
       dispatch({
         type: ActionType.SIGN_IN,
         payload: {
-          user: user.data
+          user: updatedUser.data
         }
       })
     },

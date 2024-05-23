@@ -21,29 +21,43 @@ import DatePicker from 'react-datepicker'
 
 // ** Styled Components
 import DatePickerWrapper from 'src/layouts/dashboard/libs/react-datepicker'
-import { HumanResourceInfo } from 'src/types'
+import { UserBasicInformation } from 'src/types'
 import { useFormik } from 'formik'
 import { getChangedFields } from 'src/utils/helpers'
-import { toast } from 'react-toastify'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
 })
 
-interface TabInfoTypes {
-  userInfo: HumanResourceInfo
-  UpdateUser: (value: any) => void
-}
+export const TabInfo = () => {
+  const { user, updateCurrentUser } = useAuth<AuthContextType>()
 
-export const TabInfo = ({ userInfo, UpdateUser }: TabInfoTypes) => {
+  const {
+    bio = '',
+    mobile = 0,
+    dob: rawDob = null, // Use an alias to avoid conflict with the dob conversion
+    country = '',
+    gender = '',
+    qualification = '',
+    languages = []
+  } = user || {}
+
+  // Convert dob to a Date object if it exists
+  const dob = rawDob ? new Date(rawDob) : null
+
+  // Combine all properties into userInfo object
+  const userInfo = { bio, mobile, dob, country, gender, qualification, languages }
+
   const formik = useFormik({
     initialValues: userInfo,
     enableReinitialize: true,
     onSubmit: async (values, helpers): Promise<void> => {
-      const updatingValues = { ...getChangedFields<HumanResourceInfo>(values, formik.initialValues) }
-      await UpdateUser(updatingValues)
+      const updatingValues = { ...getChangedFields<UserBasicInformation>(values, formik.initialValues) }
+
+      await updateCurrentUser(updatingValues)
       helpers.setSubmitting(false)
-      toast.success('Information Updated')
     }
   })
 

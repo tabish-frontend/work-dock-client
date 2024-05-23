@@ -19,14 +19,15 @@ Axios.interceptors.request.use(
   },
   error => {
     // Handle request error
-    console.error('Request error:', error)
 
     return Promise.reject(error)
   }
 )
 
 Axios.interceptors.response.use(
-  response => {
+  (response: any) => {
+    response.data.message && toast.success(response.data.message)
+
     return response.data
   },
   error => {

@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify'
 import Axios from 'src/configs/axios'
 import { Login } from 'src/types'
 
@@ -16,24 +15,25 @@ class AuthApi {
   async signIn(body: Login) {
     try {
       const response = await Axios.post('/auth/login', body)
-      toast.success('Login Success')
 
       return response
     } catch (error) {}
   }
 
-  async me() {
-    try {
-      const response = await Axios.get(`/users/me`)
+  async signOut() {
+    const response = await Axios.post(`/auth/logout`)
 
-      return response
-    } catch (error) {
-      throw new Error('Failed to sign in')
-    }
+    return response
   }
 
-  async update_me(body: object) {
-    const response = await Axios.patch('/users/update-me', body)
+  async forgotPassword(body: ForgotPassword) {
+    const response = await Axios.post('/auth/forgotPassword', body)
+
+    return response
+  }
+
+  async resetPassword(reset_token: string | string[] | undefined, body: object) {
+    const response = await Axios.patch(`/auth/resetPassword/${reset_token}`, body)
 
     return response
   }
@@ -48,14 +48,18 @@ class AuthApi {
     }
   }
 
-  async forgotPassword(body: ForgotPassword) {
-    const response = await Axios.post('/auth/forgotPassword', body)
+  async me() {
+    try {
+      const response = await Axios.get(`/users/me`)
 
-    return response
+      return response
+    } catch (error) {
+      throw new Error('Failed to sign in')
+    }
   }
 
-  async resetPassword(reset_token: string | string[] | undefined, body: object) {
-    const response = await Axios.patch(`/auth/resetPassword/${reset_token}`, body)
+  async update_me(body: object) {
+    const response = await Axios.patch('/users/update-me', body)
 
     return response
   }

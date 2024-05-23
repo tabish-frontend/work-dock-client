@@ -15,9 +15,13 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 // ** Type import
 import { VerticalNavItemsType } from 'src/layouts/dashboard/types'
 import { paths } from 'src/contants/paths'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
 
 const navigation = (): VerticalNavItemsType => {
-  return [
+  const { user } = useAuth<AuthContextType>()
+
+  const navItems = [
     {
       title: 'Dashboard',
       icon: HomeOutline,
@@ -26,7 +30,8 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Employees',
       icon: AccountCogOutline,
-      path: paths.employees
+      path: paths.employees,
+      roles: ['admin', 'hr']
     },
     {
       title: 'Attendance',
@@ -44,11 +49,22 @@ const navigation = (): VerticalNavItemsType => {
       path: '#'
     },
     {
-      title: 'Taks',
+      title: 'Tasks',
       icon: Table,
       path: '#'
     }
   ]
+
+  // Filter navigation items based on user role
+  const filteredNavItems = navItems.filter(item => {
+    // If the item doesn't have a roles property, it's visible to all roles
+    if (!item.roles) return true
+
+    // Check if the user's role is included in the item's roles array
+    return item.roles.includes(user?.role ? user.role : '')
+  })
+
+  return filteredNavItems
 }
 
 export default navigation

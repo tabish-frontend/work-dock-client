@@ -21,3 +21,35 @@ export const getChangedFields = <T extends FormikValues>(values: T, initialValue
 
   return changedFields
 }
+
+export const formatDuration = (startTime: Date, endTime: Date) => {
+  const durationMs = new Date(endTime).getTime() - new Date(startTime).getTime()
+  const totalMinutes = Math.floor(durationMs / 60000)
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+
+  return `${hours} hr${hours !== 1 ? 's' : ''} ${minutes} min${minutes !== 1 ? 's' : ''}`
+}
+
+export const formatDob = (dateStr: Date): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }
+  const formatter = new Intl.DateTimeFormat('en-GB', options)
+
+  return formatter.format(dateStr)
+}
+
+export const calculateWorkingPercentage = (startTime: Date, endTime: Date | null) => {
+  const shiftDuration = 8 * 60 * 60 * 1000 // 8 hours in milliseconds
+  let elapsedTime
+  if (!endTime) {
+    elapsedTime = new Date().getTime() - new Date(startTime).getTime()
+  } else {
+    elapsedTime = new Date(endTime).getTime() - new Date(startTime).getTime()
+  }
+
+  return (elapsedTime / shiftDuration) * 100
+}

@@ -11,7 +11,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
   Typography
 } from '@mui/material'
@@ -36,10 +35,6 @@ const CreateEmployeeComponent = () => {
       toast.success('Employee Added')
     }
   })
-
-  const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
-    formik.setFieldValue('designation', event.target.value)
-  }
 
   useEffect(() => {
     console.log('formik values', formik.values)
@@ -127,8 +122,7 @@ const CreateEmployeeComponent = () => {
                       label='Designation'
                       name='designation'
                       required
-                      multiple
-                      onChange={handleSelectChange}
+                      onChange={formik.handleChange}
                       value={formik.values.designation}
                     >
                       <MenuItem value='human resource'>Human Resource</MenuItem>

@@ -28,7 +28,6 @@ import { NextPage } from 'next'
 import { AuthLayout } from 'src/layouts/auth'
 import { PasswordField } from 'src/components/shared'
 import { authApi } from 'src/api'
-import { toast } from 'react-toastify'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -57,7 +56,6 @@ const ResetPasswordComponent = () => {
         await authApi.resetPassword(reset_token, { password: values.password })
         const href = paths.auth.login
         router.push(href)
-        toast.success('Password reset Sucessfully')
       } catch (err) {
         helpers.setStatus({ success: false })
         helpers.setSubmitting(false)

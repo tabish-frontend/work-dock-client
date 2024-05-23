@@ -8,21 +8,27 @@ import CardContent from '@mui/material/CardContent'
 
 import { PasswordField } from 'src/components/shared'
 import { useFormik } from 'formik'
-import { UpdateMyPassword } from 'src/formilk'
-import { toast } from 'react-toastify'
-import { authApi } from 'src/api/auth'
+import { UpdateMyPassword, UpdateMyPasswordValidation } from 'src/formilk'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
+import { paths } from 'src/contants/paths'
+import { useRouter } from 'next/router'
 
 export const TabSecurity = () => {
+  const { changePassword } = useAuth<AuthContextType>()
+
+  const router = useRouter()
+
   // ** Formik
   const formik = useFormik({
     initialValues: UpdateMyPassword,
-    enableReinitialize: true,
+    validationSchema: UpdateMyPasswordValidation,
     onSubmit: async (values, helpers): Promise<void> => {
-      await authApi.changePassword(values)
+      await changePassword(values)
+      router.push(paths.auth.login)
       helpers.setStatus({ success: true })
       helpers.setSubmitting(false)
       formik.handleReset(formik.initialValues)
-      toast.success('Password Changed Succesfully')
     }
   })
 
@@ -38,6 +44,9 @@ export const TabSecurity = () => {
                   label={'Current Password'}
                   name={'current_password'}
                   values={formik.values.current_password}
+                  formikErrors={formik.errors.current_password}
+                  formikTouched={formik.touched.current_password}
+                  handleBlur={formik.handleBlur}
                 />
               </Grid>
 
@@ -47,6 +56,9 @@ export const TabSecurity = () => {
                   label={'New Password'}
                   name={'password'}
                   values={formik.values.password}
+                  formikErrors={formik.errors.password}
+                  formikTouched={formik.touched.password}
+                  handleBlur={formik.handleBlur}
                 />
               </Grid>
 
@@ -56,6 +68,9 @@ export const TabSecurity = () => {
                   label={'Confirm Password'}
                   name={'password_confirm'}
                   values={formik.values.password_confirm}
+                  formikErrors={formik.errors.password_confirm}
+                  formikTouched={formik.touched.password_confirm}
+                  handleBlur={formik.handleBlur}
                 />
               </Grid>
             </Grid>

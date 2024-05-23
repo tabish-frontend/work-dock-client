@@ -2,8 +2,8 @@ import { Employee, ForgotPassword, Login, ResetPassword, UpdatePassword } from '
 
 // ** AUTH Initial Values
 export const LoginInitialValues: Login = {
-  email: 'yonuskhan',
-  password: 'yonus12385'
+  email: '',
+  password: ''
 }
 
 export const ForgotPasswordInitialValues: ForgotPassword = {
@@ -28,7 +28,7 @@ export const employeeInitialValues: Employee = {
   mobile: undefined,
   email: '',
   qualification: '',
-  designation: [],
+  designation: '',
   company: '',
   account_status: 'active',
   national_identity_number: undefined

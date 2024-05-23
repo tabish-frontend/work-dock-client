@@ -10,7 +10,7 @@ import { AlertOctagon } from 'mdi-material-ui'
 import type { FC } from 'react'
 
 interface ConfirmationModalProps {
-  onDelete: () => void
+  onConfirm: () => void
   onCancel: () => void
   modal: boolean
   warning_title: string
@@ -19,7 +19,7 @@ interface ConfirmationModalProps {
   modal_color?: string
 }
 export const ConfirmationModal: FC<ConfirmationModalProps> = ({
-  onDelete,
+  onConfirm,
   onCancel,
   modal,
   warning_title,
@@ -76,7 +76,7 @@ export const ConfirmationModal: FC<ConfirmationModalProps> = ({
             }
           }}
           variant='contained'
-          onClick={onDelete}
+          onClick={onConfirm}
         >
           {button_text}
         </Button>

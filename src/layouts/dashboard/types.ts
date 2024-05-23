@@ -9,6 +9,7 @@ export type NavLink = {
   path?: string
   title: string
   action?: string
+  roles?: string[]
   subject?: string
   disabled?: boolean
   badgeContent?: string

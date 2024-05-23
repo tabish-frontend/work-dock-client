@@ -1,5 +1,5 @@
 // ** React Imports
-import { SyntheticEvent, useEffect, useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -11,20 +11,14 @@ import { styled } from '@mui/material/styles'
 import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-import InformationOutline from 'mdi-material-ui/InformationOutline'
+import { AccountOutline, LockOpenOutline, InformationOutline, Bank } from 'mdi-material-ui'
 
 // ** Demo Tabs Imports
-import { TabInfo } from './tabs'
-import { TabAccount } from './tabs'
-import { TabSecurity } from './tabs'
+import { TabAccount, TabSecurity, TabInfo, TabBank } from './tabs'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
-import { authApi } from 'src/api/auth'
-import { HumanResource } from 'src/types'
 import { NextPage } from 'next'
 import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
 
@@ -58,23 +52,23 @@ const AccountSettingsComponent = () => {
     setTabValue(newValue)
   }
 
-  const [user, setUser] = useState<HumanResource>()
+  // const [user, setUser] = useState<User>()
 
-  const handleGetMe = async () => {
-    const response = await authApi.me()
-    setUser(response.data)
-  }
+  // const handleGetMe = async () => {
+  //   const response = await authApi.me()
+  //   setUser(response.data)
+  // }
 
-  useEffect(() => {
-    handleGetMe()
-  }, [])
+  // useEffect(() => {
+  //   handleGetMe()
+  // }, [])
 
-  const UpdateUser = async (updatingValues: any) => {
-    const response = await authApi.update_me(updatingValues)
-    setUser(response.data)
+  // const UpdateUser = async (updatingValues: any) => {
+  //   const response = await authApi.update_me(updatingValues)
+  //   setUser(response.data)
 
-    return response.data
-  }
+  //   return response.data
+  // }
 
   return (
     <Card>
@@ -111,40 +105,31 @@ const AccountSettingsComponent = () => {
               </Box>
             }
           />
+          <Tab
+            value='bank'
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Bank />
+                <TabName>Bank Details</TabName>
+              </Box>
+            }
+          />
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount
-            UpdateUser={UpdateUser}
-            userDetails={{
-              _id: user?._id || '',
-              avatar: user?.avatar || '',
-              email: user?.email || '',
-              full_name: user?.full_name || '',
-              username: user?.username || '',
-              designation: user?.designation || [],
-              account_status: user?.account_status || '',
-              company: user?.company || ''
-            }}
-          />
+          <TabAccount />
         </TabPanel>
+
         <TabPanel sx={{ p: 0 }} value='security'>
           <TabSecurity />
         </TabPanel>
+
         <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo
-            UpdateUser={UpdateUser}
-            userInfo={{
-              _id: user?._id || '',
-              bio: user?.bio || '',
-              mobile: user?.mobile || 0,
-              dob: new Date(user?.dob || ''),
-              country: user?.country || '',
-              gender: user?.gender || '',
-              qualification: user?.qualification || '',
-              languages: user?.languages || []
-            }}
-          />
+          <TabInfo />
+        </TabPanel>
+
+        <TabPanel sx={{ p: 0 }} value='bank'>
+          <TabBank />
         </TabPanel>
       </TabContext>
     </Card>

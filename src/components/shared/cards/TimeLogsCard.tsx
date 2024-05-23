@@ -3,109 +3,188 @@
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Typography from '@mui/material/Typography'
+
+// import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icons Imports
-import ClockIcon from 'mdi-material-ui/ClockOutline'
+
 import ClockInIcon from 'mdi-material-ui/ClockCheckOutline'
 import ClockOutIcon from 'mdi-material-ui/ClockMinus'
 
 // ** Types
-import { Button, useTheme } from '@mui/material'
+import { Button, Grid, Stack, Typography, useTheme } from '@mui/material'
+
+import { ReactApexcharts } from '../react-apexcharts'
+import { attendanceApi } from 'src/api'
 import { useEffect, useState } from 'react'
+import { calculateWorkingPercentage, formatDuration } from 'src/utils/helpers'
+import { ConfirmationModal } from '../modals'
 
 export const TimeLogCard = () => {
+  const [attendance, setAttendance] = useState<any>(null)
+  const [percentageWorked, setPercentageWorked] = useState<number>(0)
+  const [clockOutModal, setClockOutModal] = useState(false)
   const theme = useTheme()
 
-  const [time, setTime] = useState<string>('')
+  const fetchTodayAttendance = async () => {
+    const response = await attendanceApi.getTodayAttendance()
+
+    if (response) {
+      const todayAttendance = response.data.attendance
+      setAttendance(todayAttendance)
+      setPercentageWorked(calculateWorkingPercentage(todayAttendance.timeIn, todayAttendance.timeOut))
+    } else {
+      setAttendance(null)
+    }
+  }
 
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date()
-      const newTime = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      })
-      setTime(newTime)
-    }
-
-    updateTime()
-    const intervalId = setInterval(updateTime, 1000)
-
-    return () => clearInterval(intervalId)
+    fetchTodayAttendance()
   }, [])
 
+  const handleTimeLog = async (action: string) => {
+    const response = await attendanceApi.manageAttendance(action, {
+      notes: ''
+    })
+    setAttendance(response.data.attendance)
+  }
+
+  const options = {
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          size: '75%'
+        },
+        track: {
+          background: '#e7e7e7',
+          strokeWidth: '100%',
+          margin: 0
+        },
+        dataLabels: {
+          name: {
+            fontSize: '16px',
+            fontWeight: 600
+          },
+          value: {
+            fontSize: '16px'
+          },
+          total: {
+            show: true,
+            label: 'Working',
+            formatter: () => `${percentageWorked.toFixed(2)}%`
+          }
+        }
+      }
+    },
+    colors: ['#804BDF'],
+    labels: ['Progress']
+  }
+
+  const series = [percentageWorked]
+
   return (
-    <Card>
-      <CardHeader title='Attendance' titleTypographyProps={{ sx: { lineHeight: '1.2', letterSpacing: '0.31px' } }} />
-      <CardContent sx={{ pt: theme.spacing(2) }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-          <ClockIcon fontSize='large' />
-          <Typography variant='h5' sx={{ my: 4 }}>
-            {time}
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: { md: 'row', xs: 'column' } }}>
-            <Button variant='contained' sx={{ m: 2 }} color='info' startIcon={<ClockInIcon />}>
-              CHECK IN
-            </Button>
-            <Button variant='contained' color='secondary' sx={{ m: 2 }} startIcon={<ClockOutIcon />}>
-              CHECK OUT
-            </Button>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            marginTop: theme.spacing(5)
+    <>
+      <Card>
+        <CardHeader
+          title='Attendance'
+          titleTypographyProps={{
+            sx: { lineHeight: '1.2', letterSpacing: '0.31px' }
           }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'center'
-            }}
-          >
-            <Typography variant='body1'>Time In</Typography>
-            <Typography variant='subtitle2'>08:30 am</Typography>
-          </Box>
+        />
+        <CardContent sx={{ pt: theme.spacing(2) }}>
+          <Grid container>
+            <Grid item xs={12} my={2}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Stack direction={'column'} spacing={2}>
+                    {attendance && (
+                      <Typography variant='body1' fontWeight={600}>
+                        {`ClockIn: ${
+                          attendance &&
+                          new Date(attendance?.timeIn).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })
+                        }`}
+                      </Typography>
+                    )}
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'center'
-            }}
-          >
-            <Typography variant='body1'>Time Out</Typography>
-            <Typography variant='subtitle2'>08:30 am</Typography>
-          </Box>
+                    {attendance && attendance.timeOut !== null && (
+                      <Typography variant='body1' fontWeight={600}>
+                        {`ClockOut: ${
+                          attendance &&
+                          new Date(attendance?.timeOut).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })
+                        }`}
+                      </Typography>
+                    )}
+                  </Stack>
+                </Box>
+                {!attendance || attendance.timeIn === null || attendance.timeOut === null ? (
+                  <Button
+                    variant='contained'
+                    color={attendance && attendance.timeIn ? 'error' : 'success'}
+                    startIcon={attendance && attendance.timeIn ? <ClockOutIcon /> : <ClockInIcon />}
+                    onClick={() =>
+                      attendance && attendance.timeIn ? setClockOutModal(true) : handleTimeLog('clockIn')
+                    }
+                  >
+                    {attendance && attendance.timeIn ? 'CHECK OUT' : 'CHECK IN'}
+                  </Button>
+                ) : (
+                  <Typography variant='body1'>
+                    {`Duration: ${formatDuration(attendance.timeIn, attendance.timeOut)}`}
+                  </Typography>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}
+            >
+              <ReactApexcharts
+                options={options as any}
+                series={[percentageWorked]}
+                type='radialBar'
+                height={270}
+                key={series[0]}
+              />
+            </Box>
+          </Grid>
+        </CardContent>
+      </Card>
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'center'
-            }}
-          >
-            <Typography variant='body1'>Duration</Typography>
-            <Typography variant='subtitle2'>08:54 min</Typography>
-          </Box>
-        </Box>
-
-        <Typography variant='body1' mt={10} textAlign='center'>
-          Lorem ipsum dolor sit amet
-        </Typography>
-        <Typography variant='body1' textAlign='center'>
-          Lorem ipsum dolor sit amet
-        </Typography>
-      </CardContent>
-    </Card>
+      {clockOutModal && (
+        <ConfirmationModal
+          warning_title={'Clock Out'}
+          warning_text={'Are you sure you want to Clock Out ?'}
+          button_text={'Yes'}
+          modal={clockOutModal}
+          onCancel={() => {
+            setClockOutModal(false)
+          }}
+          onConfirm={async () => {
+            handleTimeLog('clockOut')
+            setClockOutModal(false)
+          }}
+        />
+      )}
+    </>
   )
 }
