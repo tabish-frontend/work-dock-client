@@ -26,7 +26,7 @@ export const employeeInitialValues: Employee = {
   username: '',
   full_name: '',
   mobile: undefined,
-  role: 'employee',
+  role: 'admin',
   email: '',
   qualification: '',
   designation: '',
