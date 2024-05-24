@@ -7,6 +7,8 @@ import { Box, IconButton } from '@mui/material'
 import RefreshIcon from 'mdi-material-ui/RefreshCircle'
 import { useState } from 'react'
 import { quotes } from 'src/contants/quotes'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
 
 // Styled component for the triangle shaped background image
 const TriangleImg = styled('img')({
@@ -27,6 +29,8 @@ const TriangleImg = styled('img')({
 // })
 
 export const WelcomeCard = () => {
+  const { user } = useAuth<AuthContextType>()
+
   // ** Hook
   const theme = useTheme()
 
@@ -43,7 +47,7 @@ export const WelcomeCard = () => {
       <CardContent sx={{ height: 190 }}>
         <TriangleImg alt='triangle background' src={`/images/misc/${imageSrc}`} />
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Typography variant='h5'>Good Morning! Zain 🥳</Typography>
+          <Typography variant='h5'>{`Good Morning! ${user?.full_name.split(' ')[0]} 🥳`}</Typography>
 
           <IconButton color='secondary' onClick={handleNewQuote}>
             <RefreshIcon fontSize='large' />
@@ -54,7 +58,6 @@ export const WelcomeCard = () => {
         <Typography variant='h6' sx={{ letterSpacing: '0.25px' }}>
           <q>{quote}</q>
         </Typography>
-        {/* <TrophyImg alt='trophy' src='/images/misc/trophy.png' /> */}
       </CardContent>
     </Card>
   )

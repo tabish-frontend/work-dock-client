@@ -4,7 +4,9 @@ export interface Employee {
   bio?: string
   dob?: Date | null
   country?: string
+  role?: string
   designation: string
+  avatar?: string
   username: string
   mobile: number | undefined
   email: string

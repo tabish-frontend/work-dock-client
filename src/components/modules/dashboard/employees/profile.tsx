@@ -53,7 +53,7 @@ const EmployeeProfileComponent = () => {
                   width={137}
                   height={137}
                   alt='Profile'
-                  src='/images/avatars/1.png'
+                  src={employeeData?.avatar || '/images/avatars/1.png'}
                 />
                 <Typography variant='subtitle1' fontWeight={500} sx={{ my: 2, textAlign: 'center' }}>
                   {employeeData?.username}

@@ -24,6 +24,19 @@ const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
     borderRight: `1px solid ${theme.palette.divider}`
   }
 }))
+
+const truncateBio = (bio: string | undefined, maxLength: number) => {
+  const defaultText = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime debitis autem '
+  if (!bio) {
+    return defaultText
+  }
+  if (bio.length <= maxLength) {
+    return bio
+  }
+
+  return bio.substring(0, maxLength) + '...'
+}
+
 export const EmployeeCard = ({ employee }: { employee: Employee }) => {
   const router = useRouter()
 
@@ -43,7 +56,7 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
               width={120}
               height={120}
               alt='Apple iPhone 11 Pro'
-              src='/images/avatars/1.png'
+              src={employee.avatar || '/images/avatars/1.png'}
             />
           </CardContent>
         </StyledGrid>
@@ -62,7 +75,7 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
             </Typography>
             <Button style={{ backgroundColor: '#EEE5FF', padding: 5 }}>{employee.designation}</Button>
             <Typography variant='body2' sx={{ marginBottom: 3.5, marginTop: 3.5 }}>
-              {employee.bio || 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime debitis autem '}
+              {truncateBio(employee?.bio, 70)}
             </Typography>
           </CardContent>
         </Grid>

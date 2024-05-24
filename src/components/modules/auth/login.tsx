@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -32,6 +31,7 @@ import { AuthContextType } from 'src/context/auth'
 import { paths } from 'src/contants/paths'
 import { NextPage } from 'next'
 import { AuthLayout } from 'src/layouts/auth'
+import { LoadingButton } from '@mui/lab'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -126,9 +126,23 @@ const LoginComponent = () => {
                 <LinkStyled>Forgot Password?</LinkStyled>
               </Link>
             </Box>
-            <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} type='submit'>
+            {/* <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} type='submit'>
               Login
-            </Button>
+            </Button> */}
+
+            <LoadingButton
+              fullWidth
+              loading={formik.isSubmitting}
+              loadingPosition='start'
+              startIcon={<></>}
+              type='submit'
+              variant='contained'
+              sx={{
+                pl: formik.isSubmitting ? '40px' : '16px'
+              }}
+            >
+              Login
+            </LoadingButton>
           </form>
         </CardContent>
       </Card>

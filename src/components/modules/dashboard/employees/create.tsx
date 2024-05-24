@@ -20,7 +20,7 @@ import { useFormik } from 'formik'
 import { employeeInitialValues } from 'src/formilk'
 import { employeesApi } from 'src/api'
 import { useRouter } from 'next/router'
-import { toast } from 'react-toastify'
+import { LoadingButton } from '@mui/lab'
 
 const CreateEmployeeComponent = () => {
   const router = useRouter()
@@ -32,7 +32,6 @@ const CreateEmployeeComponent = () => {
       helpers.setStatus({ success: true })
       helpers.setSubmitting(false)
       router.back()
-      toast.success('Employee Added')
     }
   })
 
@@ -163,9 +162,18 @@ const CreateEmployeeComponent = () => {
             </CardContent>
             <Divider sx={{ margin: 0 }} />
             <CardActions>
-              <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
+              <LoadingButton
+                loading={formik.isSubmitting}
+                loadingPosition='start'
+                startIcon={<></>}
+                type='submit'
+                variant='contained'
+                sx={{
+                  pl: formik.isSubmitting ? '40px' : '16px'
+                }}
+              >
                 Submit
-              </Button>
+              </LoadingButton>
               <Button size='large' color='secondary' variant='outlined' onClick={() => router.back()}>
                 Cancel
               </Button>
