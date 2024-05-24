@@ -18,12 +18,12 @@ export const ResetPasswordValidation = Yup.object({
 })
 
 export const UpdateMyPasswordValidation = Yup.object({
-  current_password: Yup.string()
-    .required('Please enter your current password')
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      'Must Contain 8 Characters, One Uppercase(A-Z), One Lowercase(a-z), One Number(0-9) and special case Character(e.g. !@#$%^&*)'
-    ),
+  // current_password: Yup.string()
+  //   .required('Please enter your current password')
+  //   .matches(
+  //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+  //     'Must Contain 8 Characters, One Uppercase(A-Z), One Lowercase(a-z), One Number(0-9) and special case Character(e.g. !@#$%^&*)'
+  //   ),
   password: Yup.string()
     .required('New Password is required')
     .notOneOf([Yup.ref('password_current')], 'New password must be different from the current password')
