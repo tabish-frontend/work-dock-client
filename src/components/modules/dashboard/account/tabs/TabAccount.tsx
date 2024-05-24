@@ -29,6 +29,7 @@ import { useFormik } from 'formik'
 import { ImageCrop } from 'src/components/shared'
 import { AuthContextType } from 'src/context/auth'
 import { useAuth } from 'src/hooks'
+import { LoadingButton } from '@mui/lab'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -154,10 +155,10 @@ export const TabAccount = () => {
                   onChange={formik.handleChange}
                 >
                   <MenuItem value='human resource'>Human Resource</MenuItem>
-                  <MenuItem value='software engineer'>Software Engineer</MenuItem>
-                  <MenuItem value='editor'>Editor</MenuItem>
-                  <MenuItem value='maintainer'>Maintainer</MenuItem>
-                  <MenuItem value='subscriber'>Subscriber</MenuItem>
+                  <MenuItem value='developer'>Developer</MenuItem>
+                  <MenuItem value='designer'>Designer</MenuItem>
+                  <MenuItem value='customer representative'>Customer Representative</MenuItem>
+                  <MenuItem value='wordpress developer'>Wordpress Developer</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -189,9 +190,18 @@ export const TabAccount = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
+              <LoadingButton
+                loading={formik.isSubmitting}
+                loadingPosition='start'
+                startIcon={<></>}
+                type='submit'
+                variant='contained'
+                sx={{
+                  pl: formik.isSubmitting ? '40px' : '16px'
+                }}
+              >
                 Save Changes
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </form>

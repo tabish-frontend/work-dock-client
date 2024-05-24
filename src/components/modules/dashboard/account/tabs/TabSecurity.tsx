@@ -1,7 +1,6 @@
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icons Imports
@@ -13,6 +12,7 @@ import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
 import { paths } from 'src/contants/paths'
 import { useRouter } from 'next/router'
+import { LoadingButton } from '@mui/lab'
 
 export const TabSecurity = () => {
   const { changePassword } = useAuth<AuthContextType>()
@@ -89,9 +89,18 @@ export const TabSecurity = () => {
 
       <CardContent>
         <Box sx={{ mt: 11 }}>
-          <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
+          <LoadingButton
+            loading={formik.isSubmitting}
+            loadingPosition='start'
+            startIcon={<></>}
+            type='submit'
+            variant='contained'
+            sx={{
+              pl: formik.isSubmitting ? '40px' : '16px'
+            }}
+          >
             Save Changes
-          </Button>
+          </LoadingButton>
         </Box>
       </CardContent>
     </form>

@@ -1,5 +1,5 @@
 // ** React Imports
-import { createContext, useState, ReactNode } from 'react'
+import { createContext, useState, ReactNode, useEffect } from 'react'
 
 // ** MUI Imports
 import { PaletteMode } from '@mui/material'
@@ -33,13 +33,41 @@ export const SettingsContext = createContext<SettingsContextValue>({
   settings: initialSettings
 })
 
+const STORAGE_KEY = 'app.settings'
+
+const restoreSettings = (): Settings | null => {
+  let value = null
+
+  try {
+    const restored: string | null = window.localStorage.getItem(STORAGE_KEY)
+
+    if (restored) {
+      value = JSON.parse(restored)
+    }
+  } catch (err) {
+    // If stored data is not a strigified JSON this will fail,
+    // that's why we catch the error
+  }
+
+  return value
+}
+
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   // ** State
   const [settings, setSettings] = useState<Settings>({ ...initialSettings })
 
   const saveSettings = (updatedSettings: Settings) => {
     setSettings(updatedSettings)
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSettings))
   }
+
+  useEffect(() => {
+    const restored = restoreSettings()
+
+    if (restored) {
+      setSettings(restored)
+    }
+  }, [])
 
   return <SettingsContext.Provider value={{ settings, saveSettings }}>{children}</SettingsContext.Provider>
 }

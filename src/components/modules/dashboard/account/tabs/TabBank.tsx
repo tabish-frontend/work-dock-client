@@ -1,6 +1,5 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import CardContent from '@mui/material/CardContent'
@@ -12,6 +11,7 @@ import { getChangedFields } from 'src/utils/helpers'
 import { BankNames } from 'src/contants/bank-names'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
+import { LoadingButton } from '@mui/lab'
 
 export const TabBank = () => {
   const { user, updateCurrentUser } = useAuth<AuthContextType>()
@@ -115,9 +115,18 @@ export const TabBank = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
+            <LoadingButton
+              loading={formik.isSubmitting}
+              loadingPosition='start'
+              startIcon={<></>}
+              type='submit'
+              variant='contained'
+              sx={{
+                pl: formik.isSubmitting ? '40px' : '16px'
+              }}
+            >
               Save Changes
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </form>

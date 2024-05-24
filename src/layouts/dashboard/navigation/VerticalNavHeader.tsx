@@ -34,12 +34,11 @@ const MenuHeaderWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const HeaderTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
-  fontWeight: 600,
+  fontWeight: 900,
   lineHeight: 'normal',
   textTransform: 'uppercase',
   color: theme.palette.text.primary,
-  transition: 'opacity .25s ease-in-out, margin .25s ease-in-out',
-  fontFamily: 'Poppins-SemiBold, Poppins'
+  fontFamily: 'Inter, sans-serif'
 }))
 
 const StyledLink = styled('a')({

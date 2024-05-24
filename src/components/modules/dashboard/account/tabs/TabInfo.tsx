@@ -5,7 +5,6 @@ import { forwardRef } from 'react'
 import Grid from '@mui/material/Grid'
 import Radio from '@mui/material/Radio'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import FormLabel from '@mui/material/FormLabel'
@@ -26,6 +25,7 @@ import { useFormik } from 'formik'
 import { getChangedFields } from 'src/utils/helpers'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
+import { LoadingButton } from '@mui/lab'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
@@ -164,9 +164,18 @@ export const TabInfo = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }} type='submit'>
+            <LoadingButton
+              loading={formik.isSubmitting}
+              loadingPosition='start'
+              startIcon={<></>}
+              type='submit'
+              variant='contained'
+              sx={{
+                pl: formik.isSubmitting ? '40px' : '16px'
+              }}
+            >
               Save Changes
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </form>
