@@ -1,216 +1,129 @@
-/*eslint-disable*/
+/* eslint-disable */
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
+import { Stack, styled, Box } from '@mui/material'
 import {
-  Paper,
-  TableBody,
-  TableCell,
-  TableContainer,
-  Table,
-  TableRow,
-  TableHead,
-  Stack,
-  styled,
-  Badge
-} from '@mui/material'
-import { CheckCircleOutline, CloseCircleOutline, ClockTimeThreeOutline, TimerSandEmpty } from 'mdi-material-ui'
-import { useEffect, useState } from 'react'
+  CheckCircleOutline,
+  CloseCircleOutline,
+  ClockTimeThreeOutline,
+  AccountOutline,
+  LockOpenOutline
+} from 'mdi-material-ui'
+import { SyntheticEvent, useState } from 'react'
 import { NextPage } from 'next'
 import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
-import { attendanceApi } from 'src/api'
-import { AttendanceStatus } from 'src/contants/status'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import MuiTab, { TabProps } from '@mui/material/Tab'
+import { AllUserAttendance } from './tabs/all-user-attendance'
+import { MyAttendance } from './tabs/my-attendance'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
+import { ROLES } from 'src/contants/roles'
 
-const BadgeContentSpan = styled('span')(({ theme }) => ({
-  width: 3,
-  height: 3,
-  borderRadius: '50%',
-  // backgroundColor: theme.palette.secondary.light,
-  boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
+const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    minWidth: 100
+  },
+  [theme.breakpoints.down('sm')]: {
+    minWidth: 67
+  }
+}))
+
+const TabName = styled('span')(({ theme }) => ({
+  lineHeight: 1.71,
+  fontSize: '0.875rem',
+  marginLeft: theme.spacing(2.4),
+  [theme.breakpoints.down('md')]: {
+    display: 'none'
+  }
 }))
 
 const AttendanceListComponent = () => {
+  const { user } = useAuth<AuthContextType>()
+
   const [filters, setFilters] = useState({
     month: 5,
     year: 2024
   })
-  const [employees, setEmployees] = useState<undefined | []>([])
 
-  const handleGetAttendances = async () => {
-    const response = await attendanceApi.getAllUserAttendance(filters)
+  const [tabValue, setTabValue] = useState<string | string[]>(
+    user?.role === ROLES.Employee ? 'my_attendance' : 'employee_attendance'
+  )
 
-    setEmployees(response.data)
-  }
-
-  useEffect(() => {
-    handleGetAttendances()
-  }, [])
-
-  // Function to check if a date is in the past
-  const isPastDate = (date: number, joinDate: number) => {
-    return date < joinDate
-  }
-
-  // Function to check if a date is in the future
-  const isFutureDate = (date: number, currentDate: number) => {
-    return date > currentDate
-  }
-
-  const renderBadge = (
-    dayAttendance: { timeOut: any; status: string },
-    date: number,
-    joinDate: number,
-    currentDate: number
-  ) => {
-    if (dayAttendance) {
-      if (dayAttendance.status === AttendanceStatus.SHORT_ATTENDANCE) {
-        return <TimerSandEmpty sx={{ fontSize: 16 }} color='success' />
-      } else if (dayAttendance.status === AttendanceStatus.FULL_DAY_PRESENT) {
-        return <CheckCircleOutline sx={{ fontSize: 16 }} color='success' />
-      } else if (dayAttendance.status === AttendanceStatus.HALF_DAY_PRESENT) {
-        return <ClockTimeThreeOutline sx={{ fontSize: 16 }} color='warning' />
-      } else if (dayAttendance.status === AttendanceStatus.FULL_DAY_ABSENT) {
-        return <CloseCircleOutline sx={{ fontSize: 16 }} color='error' />
-      } else {
-        return (
-          <Badge
-            overlap='circular'
-            badgeContent={<BadgeContentSpan style={{ backgroundColor: 'green', width: 6, height: 6 }} />}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          />
-        )
-      }
-    } else {
-      if (isPastDate(date, joinDate) || isFutureDate(date, currentDate)) {
-        // If the date is in the past or future, show grey badge
-        return (
-          <Badge
-            overlap='circular'
-            badgeContent={<BadgeContentSpan style={{ backgroundColor: 'grey', width: 3, height: 3 }} />}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          />
-        )
-      } else {
-        // If attendance data is missing and the date is not in the past or future, show red badge
-        return (
-          <Badge
-            overlap='circular'
-            badgeContent={<BadgeContentSpan style={{ backgroundColor: 'red', width: 6, height: 6 }} />}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          />
-        )
-      }
-    }
+  const handleChange = (event: SyntheticEvent, newValue: string) => {
+    setTabValue(newValue)
   }
 
   return (
     <Grid container spacing={6}>
-      <Grid item xs={12}>
+      <Grid item xs={12} mb={3}>
         <Typography variant='h4' color={'#9155FD'}>
           Attendance List
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Card>
-          <Stack direction='row' spacing={5} mx={6} my={3}>
-            <Stack direction='row' spacing={2}>
-              <CheckCircleOutline sx={{ fontSize: 16 }} color='success' />
-              <Typography variant='subtitle1' lineHeight={1}>
-                Full Day Presnt
-              </Typography>
+        <TabContext value={tabValue as string}>
+          {user?.role === ROLES.HR && (
+            <TabList
+              onChange={handleChange}
+              aria-label='account-settings tabs'
+              sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
+            >
+              <Tab
+                value='employee_attendance'
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <AccountOutline />
+                    <TabName>Employees Attendance</TabName>
+                  </Box>
+                }
+              />
+              <Tab
+                value='my_attendance'
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <LockOpenOutline />
+                    <TabName>My Attendance</TabName>
+                  </Box>
+                }
+              />
+            </TabList>
+          )}
+
+          <Card sx={{ mt: 8 }}>
+            <Stack direction='row' spacing={5} mx={6} my={6}>
+              <Stack direction='row' spacing={2}>
+                <CheckCircleOutline sx={{ fontSize: 16 }} color='success' />
+                <Typography variant='subtitle1' lineHeight={1}>
+                  Full Day Presnt
+                </Typography>
+              </Stack>
+              <Stack direction='row' spacing={2}>
+                <ClockTimeThreeOutline sx={{ fontSize: 16 }} color='warning' />
+                <Typography variant='subtitle1' lineHeight={1}>
+                  Half Day present
+                </Typography>
+              </Stack>
+              <Stack direction='row' spacing={2}>
+                <CloseCircleOutline sx={{ fontSize: 16 }} color='error' />
+                <Typography variant='subtitle1' lineHeight={1}>
+                  Full Day Absent
+                </Typography>
+              </Stack>
             </Stack>
-            <Stack direction='row' spacing={2}>
-              <ClockTimeThreeOutline sx={{ fontSize: 16 }} color='warning' />
-              <Typography variant='subtitle1' lineHeight={1}>
-                Half Day present
-              </Typography>
-            </Stack>
-            <Stack direction='row' spacing={2}>
-              <CloseCircleOutline sx={{ fontSize: 16 }} color='error' />
-              <Typography variant='subtitle1' lineHeight={1}>
-                Full Day Absent
-              </Typography>
-            </Stack>
-          </Stack>
-          <TableContainer component={Paper}>
-            <Table aria-label='attendance table'>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Employee</TableCell>
-                  {[...Array(31)].map((_, index) => (
-                    <TableCell sx={{ padding: 3.4 }} key={index + 1}>
-                      {index + 1}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
 
-              <TableBody>
-                {!employees ? (
-                  <TableRow>
-                    <TableCell colSpan={4}>
-                      <Typography variant='h6'>Loading....</Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  employees.map((item: any) => (
-                    <TableRow key={item.id}>
-                      <TableCell>{item.full_name}</TableCell>
-                      {[...Array(31)].map((_, index) => {
-                        const date = index + 1
-                        const currentDate = new Date().getDate()
-                        const currentMonth = new Date().getMonth() + 1
-                        const currentYear = new Date().getFullYear()
+            <TabPanel sx={{ p: 0 }} value='employee_attendance'>
+              <AllUserAttendance filters={filters} />
+            </TabPanel>
 
-                        const joinDate = new Date(item.join_date).getDate()
-
-                        const dayAttendance = item.attendance.find(
-                          (attendanceItem: { date: string | number | Date }) =>
-                            new Date(attendanceItem.date).getDate() === date
-                        )
-
-                        return (
-                          <TableCell key={index} sx={{ width: 2 }} align='center'>
-                            {renderBadge(dayAttendance, date, joinDate, currentDate)}
-                            {/* {dayAttendance ? (
-                              <CheckCircleOutline sx={{ fontSize: 18 }} color='success' />
-                            ) : (
-                              <Badge
-                                overlap='circular'
-                                badgeContent={<BadgeContentSpan />}
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                              />
-                            )} */}
-                          </TableCell>
-                        )
-                      })}
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-              {/* <TableBody>
-                {attendance.map((employee: any) => (
-                  <TableRow key={employee.id}>
-                    <TableCell>{employee.name}</TableCell>
-                    {employee.days.map((present: any, index: number) => (
-                      <TableCell key={index} sx={{ padding: 1.5 }}>
-                        {present ? (
-                          <CheckCircleOutline sx={{ fontSize: 18 }} color='success' />
-                        ) : (
-                          <CloseCircleOutline sx={{ fontSize: 18 }} color='error' />
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody> */}
-            </Table>
-          </TableContainer>
-        </Card>
+            <TabPanel sx={{ p: 0 }} value='my_attendance'>
+              <MyAttendance filters={filters} />
+            </TabPanel>
+          </Card>
+        </TabContext>
       </Grid>
     </Grid>
   )

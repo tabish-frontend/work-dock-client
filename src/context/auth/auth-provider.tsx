@@ -8,6 +8,7 @@ import { authApi } from 'src/api/auth'
 import type { State } from './auth-context'
 import { AuthContext, initialState } from './auth-context'
 import { User } from 'src/types'
+import { attendanceApi } from 'src/api'
 
 // import Cookies from 'js-cookie'
 
@@ -18,7 +19,9 @@ enum ActionType {
   SIGN_IN = 'SIGN_IN',
   SIGN_UP = 'SIGN_UP',
   SIGN_OUT = 'SIGN_OUT',
-  CHANGE_PSWD = 'CHANGE_PSWD'
+  CHANGE_PSWD = 'CHANGE_PSWD',
+  UPDATE_ATTENDANCE = 'UPDATE_ATTENDANCE',
+  UPDATE_USER = 'UPDATE_USER'
 }
 
 type InitializeAction = {
@@ -26,6 +29,7 @@ type InitializeAction = {
   payload: {
     isAuthenticated: boolean
     user: User | null
+    attendance: any | null
   }
 }
 
@@ -33,6 +37,21 @@ type SignInAction = {
   type: ActionType.SIGN_IN
   payload: {
     user: User
+    attendance: any
+  }
+}
+
+type UpdateUserAction = {
+  type: ActionType.UPDATE_USER
+  payload: {
+    user: User
+  }
+}
+
+type UpdateAttendanceAction = {
+  type: ActionType.UPDATE_ATTENDANCE
+  payload: {
+    attendance: any
   }
 }
 
@@ -54,30 +73,58 @@ type SignOutAction = {
   type: ActionType.SIGN_OUT
 }
 
-type Action = InitializeAction | SignInAction | SignUpAction | SignOutAction | ChangePswdAction
+type Action =
+  | InitializeAction
+  | SignInAction
+  | SignUpAction
+  | SignOutAction
+  | ChangePswdAction
+  | UpdateAttendanceAction
+  | UpdateUserAction
 
 type Handler = (state: State, action: any) => State
 
 const handlers: Record<ActionType, Handler> = {
   INITIALIZE: (state: State, action: InitializeAction): State => {
-    const { isAuthenticated, user } = action.payload
+    const { isAuthenticated, user, attendance } = action.payload
 
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
-      user
+      user,
+      attendance
     }
   },
   SIGN_IN: (state: State, action: SignInAction): State => {
-    const { user } = action.payload
+    const { user, attendance } = action.payload
 
     return {
       ...state,
       isAuthenticated: true,
+      user,
+      attendance
+    }
+  },
+
+  UPDATE_USER: (state: State, action: UpdateUserAction): State => {
+    const { user } = action.payload
+
+    return {
+      ...state,
       user
     }
   },
+
+  UPDATE_ATTENDANCE: (state: State, action: UpdateAttendanceAction): State => {
+    const { attendance } = action.payload
+
+    return {
+      ...state,
+      attendance
+    }
+  },
+
   CHANGE_PSWD: (state: State, action: ChangePswdAction): State => {
     const { user } = action.payload
 
@@ -120,19 +167,34 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
       if (accessToken) {
         const user = await authApi.me()
 
-        dispatch({
-          type: ActionType.INITIALIZE,
-          payload: {
-            isAuthenticated: true,
-            user: user.data
-          }
-        })
+        const attendance_response = await attendanceApi.getTodayAttendance()
+
+        if (attendance_response) {
+          dispatch({
+            type: ActionType.INITIALIZE,
+            payload: {
+              isAuthenticated: true,
+              user: user.data,
+              attendance: attendance_response.data.attendance
+            }
+          })
+        } else {
+          dispatch({
+            type: ActionType.INITIALIZE,
+            payload: {
+              isAuthenticated: true,
+              user: user.data,
+              attendance: null
+            }
+          })
+        }
       } else {
         dispatch({
           type: ActionType.INITIALIZE,
           payload: {
             isAuthenticated: false,
-            user: null
+            user: null,
+            attendance: null
           }
         })
       }
@@ -141,7 +203,8 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
         type: ActionType.INITIALIZE,
         payload: {
           isAuthenticated: false,
-          user: null
+          user: null,
+          attendance: null
         }
       })
     }
@@ -160,13 +223,25 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
         localStorage.setItem(STORAGE_KEY, token)
 
         const user = await authApi.me()
+        const attendance_response = await attendanceApi.getTodayAttendance()
 
-        dispatch({
-          type: ActionType.SIGN_IN,
-          payload: {
-            user: user.data
-          }
-        })
+        if (attendance_response) {
+          dispatch({
+            type: ActionType.SIGN_IN,
+            payload: {
+              user: user.data,
+              attendance: attendance_response.data.attendance
+            }
+          })
+        } else {
+          dispatch({
+            type: ActionType.SIGN_IN,
+            payload: {
+              user: user.data,
+              attendance: null
+            }
+          })
+        }
       }
     },
     [dispatch]
@@ -181,6 +256,20 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
     [dispatch]
   )
 
+  const updateAttendanceLog = useCallback(
+    async (action, body): Promise<void> => {
+      const response = await attendanceApi.manageAttendance(action, body)
+
+      dispatch({
+        type: ActionType.UPDATE_ATTENDANCE,
+        payload: {
+          attendance: response.data.attendance
+        }
+      })
+    },
+    [dispatch]
+  )
+
   const signOut = useCallback(async (): Promise<void> => {
     localStorage.removeItem(STORAGE_KEY)
     dispatch({ type: ActionType.SIGN_OUT })
@@ -191,7 +280,7 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
       const updatedUser = await authApi.update_me(updatingValues)
 
       dispatch({
-        type: ActionType.SIGN_IN,
+        type: ActionType.UPDATE_USER,
         payload: {
           user: updatedUser.data
         }
@@ -208,7 +297,8 @@ export const AuthProvider: FC<AuthProviderProps> = props => {
         changePassword,
         initialize,
         signOut,
-        updateCurrentUser
+        updateCurrentUser,
+        updateAttendanceLog
       }}
     >
       {children}
