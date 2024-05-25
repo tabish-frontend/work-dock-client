@@ -6,39 +6,106 @@ import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
-import { Paper, TableBody, TableCell, TableContainer, Table, TableRow, TableHead, Stack } from '@mui/material'
-import { CheckCircleOutline, CloseCircleOutline, ClockTimeThreeOutline } from 'mdi-material-ui'
-import { useState } from 'react'
+import {
+  Paper,
+  TableBody,
+  TableCell,
+  TableContainer,
+  Table,
+  TableRow,
+  TableHead,
+  Stack,
+  styled,
+  Badge
+} from '@mui/material'
+import { CheckCircleOutline, CloseCircleOutline, ClockTimeThreeOutline, TimerSandEmpty } from 'mdi-material-ui'
+import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { DashboardLayout } from 'src/layouts/dashboard/UserLayout'
+import { attendanceApi } from 'src/api'
+import { AttendanceStatus } from 'src/contants/status'
 
-const employees = [
-  { id: 1, name: 'Employee 1' },
-  { id: 2, name: 'Employee 2' },
-  { id: 3, name: 'Employee 3' },
-  { id: 4, name: 'Employee 4' },
-  { id: 5, name: 'Employee 5' },
-  { id: 6, name: 'Employee 6' },
-  { id: 7, name: 'Employee 7' },
-  { id: 8, name: 'Employee 8' },
-  { id: 9, name: 'Employee 9' },
-  { id: 10, name: 'Employee 10' }
-]
+const BadgeContentSpan = styled('span')(({ theme }) => ({
+  width: 3,
+  height: 3,
+  borderRadius: '50%',
+  // backgroundColor: theme.palette.secondary.light,
+  boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
+}))
 
 const AttendanceListComponent = () => {
-  const [attendance, setAttendance] = useState(
-    employees.map(employee => {
-      const days = []
-      for (let i = 0; i < 31; i++) {
-        days.push(i < 15) // Set the first 15 days to true, and the rest to false
+  const [filters, setFilters] = useState({
+    month: 5,
+    year: 2024
+  })
+  const [employees, setEmployees] = useState<undefined | []>([])
+
+  const handleGetAttendances = async () => {
+    const response = await attendanceApi.getAllUserAttendance(filters)
+
+    setEmployees(response.data)
+  }
+
+  useEffect(() => {
+    handleGetAttendances()
+  }, [])
+
+  // Function to check if a date is in the past
+  const isPastDate = (date: number, joinDate: number) => {
+    return date < joinDate
+  }
+
+  // Function to check if a date is in the future
+  const isFutureDate = (date: number, currentDate: number) => {
+    return date > currentDate
+  }
+
+  const renderBadge = (
+    dayAttendance: { timeOut: any; status: string },
+    date: number,
+    joinDate: number,
+    currentDate: number
+  ) => {
+    if (dayAttendance) {
+      if (dayAttendance.status === AttendanceStatus.SHORT_ATTENDANCE) {
+        return <TimerSandEmpty sx={{ fontSize: 16 }} color='success' />
+      } else if (dayAttendance.status === AttendanceStatus.FULL_DAY_PRESENT) {
+        return <CheckCircleOutline sx={{ fontSize: 16 }} color='success' />
+      } else if (dayAttendance.status === AttendanceStatus.HALF_DAY_PRESENT) {
+        return <ClockTimeThreeOutline sx={{ fontSize: 16 }} color='warning' />
+      } else if (dayAttendance.status === AttendanceStatus.FULL_DAY_ABSENT) {
+        return <CloseCircleOutline sx={{ fontSize: 16 }} color='error' />
+      } else {
+        return (
+          <Badge
+            overlap='circular'
+            badgeContent={<BadgeContentSpan style={{ backgroundColor: 'green', width: 6, height: 6 }} />}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          />
+        )
       }
-      return {
-        id: employee.id,
-        name: employee.name,
-        days: days
+    } else {
+      if (isPastDate(date, joinDate) || isFutureDate(date, currentDate)) {
+        // If the date is in the past or future, show grey badge
+        return (
+          <Badge
+            overlap='circular'
+            badgeContent={<BadgeContentSpan style={{ backgroundColor: 'grey', width: 3, height: 3 }} />}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          />
+        )
+      } else {
+        // If attendance data is missing and the date is not in the past or future, show red badge
+        return (
+          <Badge
+            overlap='circular'
+            badgeContent={<BadgeContentSpan style={{ backgroundColor: 'red', width: 6, height: 6 }} />}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          />
+        )
       }
-    })
-  )
+    }
+  }
 
   return (
     <Grid container spacing={6}>
@@ -81,12 +148,54 @@ const AttendanceListComponent = () => {
                   ))}
                 </TableRow>
               </TableHead>
+
               <TableBody>
-                {/* Map through employees and generate rows */}
+                {!employees ? (
+                  <TableRow>
+                    <TableCell colSpan={4}>
+                      <Typography variant='h6'>Loading....</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  employees.map((item: any) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.full_name}</TableCell>
+                      {[...Array(31)].map((_, index) => {
+                        const date = index + 1
+                        const currentDate = new Date().getDate()
+                        const currentMonth = new Date().getMonth() + 1
+                        const currentYear = new Date().getFullYear()
+
+                        const joinDate = new Date(item.join_date).getDate()
+
+                        const dayAttendance = item.attendance.find(
+                          (attendanceItem: { date: string | number | Date }) =>
+                            new Date(attendanceItem.date).getDate() === date
+                        )
+
+                        return (
+                          <TableCell key={index} sx={{ width: 2 }} align='center'>
+                            {renderBadge(dayAttendance, date, joinDate, currentDate)}
+                            {/* {dayAttendance ? (
+                              <CheckCircleOutline sx={{ fontSize: 18 }} color='success' />
+                            ) : (
+                              <Badge
+                                overlap='circular'
+                                badgeContent={<BadgeContentSpan />}
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                              />
+                            )} */}
+                          </TableCell>
+                        )
+                      })}
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+              {/* <TableBody>
                 {attendance.map((employee: any) => (
                   <TableRow key={employee.id}>
                     <TableCell>{employee.name}</TableCell>
-                    {/* Generate cells for each day's attendance */}
                     {employee.days.map((present: any, index: number) => (
                       <TableCell key={index} sx={{ padding: 1.5 }}>
                         {present ? (
@@ -98,7 +207,7 @@ const AttendanceListComponent = () => {
                     ))}
                   </TableRow>
                 ))}
-              </TableBody>
+              </TableBody> */}
             </Table>
           </TableContainer>
         </Card>

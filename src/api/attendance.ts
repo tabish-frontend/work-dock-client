@@ -23,6 +23,12 @@ class AttendanceApi {
       return null
     }
   }
+
+  async getAllUserAttendance(params: any) {
+    const response = await Axios.get(`/attendance?month=${params.month}&year=${params.year}`)
+
+    return response
+  }
 }
 
 export const attendanceApi = new AttendanceApi()

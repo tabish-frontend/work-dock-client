@@ -1,6 +1,5 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import CardContent from '@mui/material/CardContent'
 
@@ -11,7 +10,7 @@ import { getChangedFields } from 'src/utils/helpers'
 import { BankNames } from 'src/contants/bank-names'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
-import { LoadingButton } from '@mui/lab'
+import { Autocomplete, LoadingButton } from '@mui/lab'
 
 export const TabBank = () => {
   const { user, updateCurrentUser } = useAuth<AuthContextType>()
@@ -42,28 +41,13 @@ export const TabBank = () => {
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={7}>
           <Grid item xs={12} sm={6}>
-            <TextField
+            <Autocomplete
+              disablePortal
+              options={BankNames}
               fullWidth
-              label='Bank Name'
-              name='bank_name'
-              select
-              required
-              onChange={formik.handleChange}
-              value={formik.values.bank_name}
-              SelectProps={{
-                MenuProps: {
-                  style: {
-                    maxHeight: '250px'
-                  }
-                }
-              }}
-            >
-              {BankNames.map(option => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
+              ListboxProps={{ style: { maxHeight: 250 } }}
+              renderInput={params => <TextField {...params} label='Bank Name' required />}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6}>
@@ -81,6 +65,7 @@ export const TabBank = () => {
             <TextField
               fullWidth
               required
+              type='number'
               label='Account Number'
               name='account_number'
               value={formik.values.account_number}
