@@ -17,38 +17,29 @@ import ClockOutIcon from 'mdi-material-ui/ClockMinus'
 import { Button, Grid, Stack, Typography, useTheme } from '@mui/material'
 
 import { ReactApexcharts } from '../react-apexcharts'
-import { attendanceApi } from 'src/api'
 import { useEffect, useState } from 'react'
 import { calculateWorkingPercentage, formatDuration } from 'src/utils/helpers'
 import { ConfirmationModal } from '../modals'
+import { useAuth } from 'src/hooks'
+import { AuthContextType } from 'src/context/auth'
 
 export const TimeLogCard = () => {
-  const [attendance, setAttendance] = useState<any>(null)
+  const { attendance, updateAttendanceLog } = useAuth<AuthContextType>()
+
   const [percentageWorked, setPercentageWorked] = useState<number>(0)
   const [clockOutModal, setClockOutModal] = useState(false)
   const theme = useTheme()
 
-  const fetchTodayAttendance = async () => {
-    const response = await attendanceApi.getTodayAttendance()
-
-    if (response) {
-      const todayAttendance = response.data.attendance
-      setAttendance(todayAttendance)
-      setPercentageWorked(calculateWorkingPercentage(todayAttendance.timeIn, todayAttendance.timeOut))
-    } else {
-      setAttendance(null)
-    }
-  }
-
   useEffect(() => {
-    fetchTodayAttendance()
-  }, [])
+    if (attendance) {
+      setPercentageWorked(calculateWorkingPercentage(attendance.timeIn, attendance.timeOut))
+    }
+  }, [attendance])
 
   const handleTimeLog = async (action: string) => {
-    const response = await attendanceApi.manageAttendance(action, {
+    await updateAttendanceLog(action, {
       notes: ''
     })
-    setAttendance(response.data.attendance)
   }
 
   const options = {

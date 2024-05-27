@@ -42,6 +42,23 @@ export const formatDob = (dateStr: Date): string => {
   return formatter.format(dateStr)
 }
 
+export const formatDate = (dateString: number) => {
+  const date = new Date(dateString)
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+
+  return date.toLocaleDateString('en-US', options)
+}
+
+export const formatTime = (timeString: number) => {
+  const date = new Date(timeString)
+  const options: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit'
+  }
+
+  return date.toLocaleTimeString('en-US', options)
+}
+
 export const calculateWorkingPercentage = (startTime: Date, endTime: Date | null) => {
   const shiftDuration = 8 * 60 * 60 * 1000 // 8 hours in milliseconds
   let elapsedTime
