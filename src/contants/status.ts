@@ -14,3 +14,27 @@ export const AttendusStatusMap: Record<string, SeverityPillColor> = {
   full_day_absent: 'error',
   short_attendance: 'warning'
 }
+
+const Sick = 'sick'
+const Casual = 'casual'
+const Half_Day = 'half_day'
+const Emergency = 'emergency'
+
+export const LeavesTypes = [
+  {
+    label: 'Sick Leave',
+    value: Sick
+  },
+  {
+    label: 'Casual Leave',
+    value: Casual
+  },
+  {
+    label: 'HalfDay Leave',
+    value: Half_Day
+  },
+  {
+    label: 'Emergency Leave',
+    value: Emergency
+  }
+]

@@ -32,12 +32,13 @@ const CustomInput = forwardRef((props, ref) => {
 
 interface HolidayModalProps {
   modal: boolean
+  modalType: string
   holidayValues: any
   onConfirm: (values: any) => void
   onCancel: () => void
 }
 
-export const HolidayModal: FC<HolidayModalProps> = ({ modal, holidayValues, onCancel, onConfirm }) => {
+export const HolidayModal: FC<HolidayModalProps> = ({ modal, modalType, holidayValues, onCancel, onConfirm }) => {
   const formik = useFormik({
     initialValues: holidayValues
       ? {
@@ -81,7 +82,9 @@ export const HolidayModal: FC<HolidayModalProps> = ({ modal, holidayValues, onCa
     <Dialog fullWidth maxWidth='sm' open={modal} onClose={onCancel} sx={{ '& .MuiPaper-root': { overflowY: 'unset' } }}>
       <form onSubmit={formik.handleSubmit}>
         <Paper elevation={12} sx={{ py: 3 }}>
-          <DialogTitle sx={{ m: 0, p: 3, fontSize: 24, fontWeight: 600 }}>Add Holiday</DialogTitle>
+          <DialogTitle sx={{ m: 0, p: 3, fontSize: 24, fontWeight: 600 }}>
+            {modalType === 'create' ? 'Add Holiday' : 'Update Holiday'}
+          </DialogTitle>
           <IconButton
             aria-label='close'
             onClick={onCancel}

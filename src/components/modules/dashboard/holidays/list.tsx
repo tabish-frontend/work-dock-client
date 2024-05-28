@@ -28,15 +28,15 @@ const HolidaysListComponent = () => {
 
   const columns = user?.role === ROLES.Admin || user?.role === ROLES.HR ? HR_Screen : employee_Screen
 
-  const [createModal, setCreateModal] = useState(false)
+  const [holidayModal, setHolidayModal] = useState(false)
   const [holidayList, setHolidayList] = useState<any[]>([])
-  const [modalType, setModalType] = useState('create')
+  const [modalType, setModalType] = useState('')
   const [holidayValues, setHolidayValues] = useState()
 
   const getHoliday = async () => {
     let response = []
     if (user?.role === ROLES.HR || user?.role === ROLES.Admin) {
-      response = await holidaysApi.getHoliday()
+      response = await holidaysApi.getAllUserHolidays()
     } else {
       response = await holidaysApi.getMyHolidays({ year: '2024' })
     }
@@ -52,7 +52,7 @@ const HolidaysListComponent = () => {
       await holidaysApi.addHoliday(HolidayValues)
     }
     getHoliday()
-    setCreateModal(false)
+    setHolidayModal(false)
   }
 
   const deleteHoliday = async (_id: string) => {
@@ -75,7 +75,10 @@ const HolidaysListComponent = () => {
 
             {(user?.role === ROLES.Admin || user?.role === ROLES.HR) && (
               <Button
-                onClick={() => setCreateModal(true)}
+                onClick={() => {
+                  setHolidayModal(true)
+                  setModalType('create')
+                }}
                 startIcon={
                   <SvgIcon>
                     <Plus />
@@ -145,7 +148,7 @@ const HolidaysListComponent = () => {
                                   sx={{ cursor: 'pointer' }}
                                   onClick={() => {
                                     setModalType('update')
-                                    setCreateModal(true)
+                                    setHolidayModal(true)
                                     setHolidayValues(holiday)
                                   }}
                                 />
@@ -168,13 +171,14 @@ const HolidaysListComponent = () => {
         </Grid>
       </Grid>
 
-      {createModal && (
+      {holidayModal && (
         <HolidayModal
           holidayValues={holidayValues}
-          modal={createModal}
+          modalType={modalType}
+          modal={holidayModal}
           onCancel={() => {
             setHolidayValues(undefined)
-            setCreateModal(false)
+            setHolidayModal(false)
           }}
           onConfirm={addAndUpdateHoliday}
         />

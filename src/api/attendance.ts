@@ -12,7 +12,7 @@ class AttendanceApi {
     const token = localStorage.getItem('accessToken')
 
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/attendance/myTodayAttendance`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/myTodayAttendance`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -31,7 +31,7 @@ class AttendanceApi {
   }
 
   async getMyAttendance(params: any) {
-    const response = await Axios.get(`/users/attendance?month=${params.month}&year=${params.year}`)
+    const response = await Axios.get(`/users/getMyallAttendance?month=${params.month}&year=${params.year}`)
 
     return response
   }

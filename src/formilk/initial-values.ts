@@ -1,4 +1,4 @@
-import { Employee, ForgotPassword, Holiday, Login, ResetPassword, UpdatePassword } from 'src/types'
+import { Employee, ForgotPassword, Holiday, Leaves, Login, ResetPassword, UpdatePassword } from 'src/types'
 
 // ** AUTH Initial Values
 export const LoginInitialValues: Login = {
@@ -40,4 +40,13 @@ export const holidayInitialValues: Holiday = {
   title: '',
   date: null,
   users: []
+}
+
+export const leaveInitialValues: Leaves = {
+  _id: '',
+  user: '',
+  date: null,
+  reason: '',
+  leave_type: '',
+  status: ''
 }

@@ -2,7 +2,7 @@ import Axios from 'src/configs/axios'
 import { Holiday } from 'src/types'
 
 class HolidayAPI {
-  async getHoliday() {
+  async getAllUserHolidays() {
     const response = await Axios.get(`/holidays`)
 
     return response.data
@@ -27,7 +27,7 @@ class HolidayAPI {
   }
 
   async getMyHolidays(params: any) {
-    const response = await Axios.get(`/users/holidays?year=${params.year}`)
+    const response = await Axios.get(`/users/getMyAllHolidays?year=${params.year}`)
 
     return response.data
   }
