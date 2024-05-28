@@ -32,6 +32,11 @@ const navigation = (): VerticalNavItemsType => {
       path: paths.attendance
     },
     {
+      title: 'Holidays',
+      icon: CubeOutline,
+      path: paths.holidays
+    },
+    {
       title: 'Leaves',
       icon: FormatLetterCase,
       path: paths.leaves

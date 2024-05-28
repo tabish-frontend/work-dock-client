@@ -1,8 +1,8 @@
 import Axios from 'src/configs/axios'
 
 class EmployeesApi {
-  async getEmployees() {
-    const response = await Axios.get(`/employees`)
+  async getAllEmployees(fields = '') {
+    const response = await Axios.get(`/employees?fields=${fields}`)
 
     return response.data
   }

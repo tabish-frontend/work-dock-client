@@ -19,7 +19,7 @@ const EmployeeListComponent = () => {
   const [employeesList, setEmployeesList] = useState([])
 
   const handleGetEmployees = async () => {
-    const response = await employeesApi.getEmployees()
+    const response = await employeesApi.getAllEmployees()
     setEmployeesList(response.users)
   }
 

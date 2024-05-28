@@ -11,6 +11,7 @@ export const paths = {
   employees: `/employees`,
   attendance: `/attendance`,
   leaves: `/leaves`,
+  holidays: `/holidays`,
   notFound: '/404'
 
   // new_admin: `/dashboard/admins/new`,

@@ -51,8 +51,6 @@ const ResetPasswordComponent = () => {
     validationSchema: ResetPasswordValidation,
     onSubmit: async (values, helpers): Promise<void> => {
       try {
-        console.log({ reset_token: reset_token, password: values.password })
-
         await authApi.resetPassword(reset_token, { password: values.password })
         const href = paths.auth.login
         router.push(href)

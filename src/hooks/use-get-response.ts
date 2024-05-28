@@ -14,7 +14,6 @@ export const useGetResponse = (url: string) => {
 
         setResponse(response.data)
       } catch (error) {
-        console.log('ERROR', error)
       } finally {
         setIsLoading(false)
       }

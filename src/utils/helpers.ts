@@ -49,6 +49,13 @@ export const formatDate = (dateString: number) => {
   return date.toLocaleDateString('en-US', options)
 }
 
+export const formatDayOfWeek = (dateString: number) => {
+  const options: Intl.DateTimeFormatOptions = { weekday: 'long' }
+  const date = new Date(dateString)
+
+  return new Intl.DateTimeFormat('en-US', options).format(date)
+}
+
 export const formatTime = (timeString: number) => {
   const date = new Date(timeString)
   const options: Intl.DateTimeFormatOptions = {

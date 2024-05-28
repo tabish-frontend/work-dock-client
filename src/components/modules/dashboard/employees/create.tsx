@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Grid from '@mui/material/Grid'
 import {
   Button,
@@ -34,10 +34,6 @@ const CreateEmployeeComponent = () => {
       router.back()
     }
   })
-
-  useEffect(() => {
-    console.log('formik values', formik.values)
-  }, [formik.values])
 
   return (
     <Grid container spacing={6}>

@@ -22,7 +22,6 @@ interface SeverityPillRootProps {
 const SeverityPillRoot = styled('span')<SeverityPillRootProps>(({ theme, ownerState }) => {
   const backgroundColor = theme.palette[ownerState.color].light
 
-  console.log('backgroundColor', backgroundColor)
   const color =
     theme.palette.mode === 'dark' ? theme.palette[ownerState.color].dark : theme.palette[ownerState.color].dark
 
@@ -53,8 +52,6 @@ export const SeverityPill: FC<SeverityPillProps> = props => {
   const { color = 'primary', children, ...other } = props
 
   const ownerState = { color }
-
-  console.log('ownerState', ownerState)
 
   return (
     <SeverityPillRoot ownerState={ownerState} {...other}>
