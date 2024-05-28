@@ -58,7 +58,7 @@ export const HolidayModal: FC<HolidayModalProps> = ({ modal, holidayValues, onCa
   const [employees, setEmployees] = useState<any[]>([])
 
   const handleGetEmployees = async () => {
-    const response = await employeesApi.getEmployees('full_name,avatar')
+    const response = await employeesApi.getAllEmployees('full_name,avatar')
     setEmployees(response.users)
   }
 
