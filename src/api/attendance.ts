@@ -24,14 +24,14 @@ class AttendanceApi {
     }
   }
 
-  async getAllUserAttendance(params: any) {
-    const response = await Axios.get(`/attendance?month=${params.month}&year=${params.year}`)
+  async getAllUserAttendance(query: any) {
+    const response = await Axios.get(`/attendance?month=${query.month}&year=${query.year}`)
 
     return response
   }
 
-  async getMyAttendance(params: any) {
-    const response = await Axios.get(`/users/getMyallAttendance?month=${params.month}&year=${params.year}`)
+  async getMyAttendance(query: any) {
+    const response = await Axios.get(`/users/getMyallAttendance?month=${query.month}&year=${query.year}`)
 
     return response
   }

@@ -1,3 +1,5 @@
+import { Shift } from './shift'
+
 export interface Employee {
   _id?: string
   full_name: string
@@ -14,4 +16,5 @@ export interface Employee {
   company: string
   account_status: string
   national_identity_number?: number | undefined
+  shift?: Shift
 }

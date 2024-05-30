@@ -1,5 +1,15 @@
 import { FormikValues } from 'formik'
 
+const dayAbbreviations: { [key: string]: string } = {
+  Monday: 'Mon',
+  Tuesday: 'Tue',
+  Wednesday: 'Wed',
+  Thursday: 'Thu',
+  Friday: 'Fri',
+  Saturday: 'Sat',
+  Sunday: 'Sun'
+}
+
 export const getChangedFields = <T extends FormikValues>(values: T, initialValues: T): Partial<T> => {
   const changedFields: Partial<T> = {}
 
@@ -49,15 +59,15 @@ export const formatDate = (dateString: number) => {
   return date.toLocaleDateString('en-US', options)
 }
 
-export const formatDayOfWeek = (dateString: number) => {
+export const getDayFromDate = (dateString: number) => {
   const options: Intl.DateTimeFormatOptions = { weekday: 'long' }
   const date = new Date(dateString)
 
   return new Intl.DateTimeFormat('en-US', options).format(date)
 }
 
-export const formatTime = (timeString: number) => {
-  const date = new Date(timeString)
+export const formatTime = (timeString: Date | null) => {
+  const date = timeString ? new Date(timeString) : new Date()
   const options: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit'
@@ -76,4 +86,8 @@ export const calculateWorkingPercentage = (startTime: Date, endTime: Date | null
   }
 
   return (elapsedTime / shiftDuration) * 100
+}
+
+export const getAbbreviatedDays = (days: string[]): string[] => {
+  return days.map(day => dayAbbreviations[day] || day)
 }

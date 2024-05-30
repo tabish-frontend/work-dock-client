@@ -15,6 +15,12 @@ export const AttendusStatusMap: Record<string, SeverityPillColor> = {
   short_attendance: 'warning'
 }
 
+export const LeavesStatus = {
+  Pending: 'pending',
+  Approved: 'approved',
+  Rejected: 'rejected'
+}
+
 const Sick = 'sick'
 const Casual = 'casual'
 const Half_Day = 'half_day'

@@ -31,6 +31,8 @@ import '../../styles/globals.css'
 import Toaster from 'src/components/shared/toaster'
 import { AuthConsumer, AuthProvider } from 'src/context/auth'
 import { SplashScreen } from 'src/components'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -80,26 +82,28 @@ const App = (props: ExtendedAppProps) => {
         <SettingsConsumer>
           {({ settings }) => {
             return (
-              <AuthProvider>
-                <AuthConsumer>
-                  {auth => {
-                    const showSlashScreen = !auth.isInitialized
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <AuthProvider>
+                  <AuthConsumer>
+                    {auth => {
+                      const showSlashScreen = !auth.isInitialized
 
-                    return (
-                      <ThemeComponent settings={settings}>
-                        {showSlashScreen ? (
-                          <SplashScreen />
-                        ) : (
-                          <>
-                            {getLayout(<Component {...pageProps} />)}
-                            <Toaster />
-                          </>
-                        )}
-                      </ThemeComponent>
-                    )
-                  }}
-                </AuthConsumer>
-              </AuthProvider>
+                      return (
+                        <ThemeComponent settings={settings}>
+                          {showSlashScreen ? (
+                            <SplashScreen />
+                          ) : (
+                            <>
+                              {getLayout(<Component {...pageProps} />)}
+                              <Toaster />
+                            </>
+                          )}
+                        </ThemeComponent>
+                      )
+                    }}
+                  </AuthConsumer>
+                </AuthProvider>
+              </LocalizationProvider>
             )
           }}
         </SettingsConsumer>

@@ -14,17 +14,17 @@ class LeavesAPI {
     return response
   }
 
-  //   async updateHoliday(holiday_id: string, body: Holiday) {
-  //     const response = await Axios.patch(`/holidays/${holiday_id}`, body)
+  async updateLeave(leave_id: string, body: Leaves) {
+    const response = await Axios.patch(`/leaves/${leave_id}`, body)
 
-  //     return response.data
-  //   }
+    return response.data
+  }
 
-  //   async deleteHoliday(holiday_id: string) {
-  //     const response = await Axios.delete(`/holidays/${holiday_id}`)
+  async deleteLeave(leave_id: string) {
+    const response = await Axios.delete(`/leaves/${leave_id}`)
 
-  //     return response.data
-  //   }
+    return response.data
+  }
 
   async getMyLeaves() {
     const response = await Axios.get(`/users/getMyLeaves`)
@@ -34,6 +34,12 @@ class LeavesAPI {
 
   async apllyForLeave(body: Leaves) {
     const response = await Axios.post(`/users/leaveApply`, body)
+
+    return response.data
+  }
+
+  async updateLeaveStatus(params: any) {
+    const response = await Axios.put(`/leaves/${params.leave_id}/status/${params.status}`)
 
     return response.data
   }

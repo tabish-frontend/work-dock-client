@@ -1,36 +1,52 @@
-import { Dialog, DialogTitle, Divider, Grid, IconButton, MenuItem, TextField, Paper } from '@mui/material'
+import {
+  Dialog,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton,
+  MenuItem,
+  TextField,
+  Paper,
+  ListItemText,
+  Avatar,
+  Stack
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { useFormik } from 'formik'
 import { CloseCircleOutline } from 'mdi-material-ui'
 
-import { forwardRef, useEffect, useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { leaveInitialValues } from 'src/formilk'
 
-import DatePickerWrapper from 'src/layouts/dashboard/libs/react-datepicker'
-import DatePicker from 'react-datepicker'
 import { employeesApi } from 'src/api'
 import { LeavesTypes } from 'src/contants/status'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
 import { ROLES } from 'src/contants/roles'
-
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField inputRef={ref} label='Date' fullWidth {...props} />
-})
+import { DatePicker } from '@mui/x-date-pickers'
 
 interface LeaveModalProps {
   modal: boolean
   modalType: string
+  leaveValues: any
   onConfirm: (values: any) => void
   onCancel: () => void
 }
 
-export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, onCancel, onConfirm }) => {
+export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, leaveValues, onCancel, onConfirm }) => {
   const { user } = useAuth<AuthContextType>()
 
   const formik = useFormik({
-    initialValues: leaveInitialValues,
+    // initialValues: leaveInitialValues,
+    initialValues: leaveValues
+      ? {
+          ...leaveValues,
+          startDate: new Date(leaveValues.startDate),
+          endDate: new Date(leaveValues.endDate),
+          user: leaveValues.user._id
+        }
+      : leaveInitialValues,
     enableReinitialize: true,
     onSubmit: async (values, helpers): Promise<void> => {
       helpers.setStatus({ success: true })
@@ -48,11 +64,13 @@ export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, onCancel, on
   }
 
   useEffect(() => {
-    user?.role === ROLES.Admin || (user?.role === ROLES.HR && handleGetEmployees())
+    if (user?.role === ROLES.Admin || user?.role === ROLES.HR) {
+      handleGetEmployees()
+    }
   }, [user])
 
   return (
-    <Dialog fullWidth maxWidth='sm' open={modal} onClose={onCancel} sx={{ '& .MuiPaper-root': { overflowY: 'unset' } }}>
+    <Dialog fullWidth maxWidth='sm' open={modal} onClose={onCancel}>
       <form onSubmit={formik.handleSubmit}>
         <Paper elevation={12} sx={{ py: 3 }}>
           <DialogTitle sx={{ m: 0, p: 3, fontSize: 24, fontWeight: 600 }}>
@@ -93,26 +111,41 @@ export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, onCancel, on
               </TextField>
             </Grid>
 
-            <Grid item xs={12}>
-              <DatePickerWrapper>
-                <DatePicker
-                  required
-                  selected={formik.values.date}
-                  showYearDropdown
-                  showMonthDropdown
-                  placeholderText='MM-DD-YYYY'
-                  customInput={<CustomInput />}
-                  onChange={(date: Date) => formik.setFieldValue('date', new Date(date))}
-                />
-              </DatePickerWrapper>
+            <Grid item xs={12} sm={6}>
+              <DatePicker
+                label='Leave From Date'
+                disablePast
+                views={['year', 'month', 'day']}
+                sx={{ width: '100%' }}
+                value={formik.values.startDate}
+                onChange={date => {
+                  formik.setFieldValue('startDate', date)
+                  formik.setFieldValue('endDate', date)
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <DatePicker
+                label='Leave to Date'
+                disablePast
+                sx={{ width: '100%' }}
+                minDate={formik.values.startDate || new Date()}
+                views={['year', 'month', 'day']}
+                value={formik.values.endDate}
+                onChange={date => {
+                  formik.setFieldValue('endDate', date)
+                }}
+              />
             </Grid>
 
             {(user?.role === ROLES.Admin || user?.role === ROLES.HR) && (
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label='Select User'
+                  label='Select Employee'
                   name='user'
+                  disabled={modalType === 'update'}
                   select
                   required
                   onBlur={formik.handleBlur}
@@ -126,9 +159,12 @@ export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, onCancel, on
                   onChange={formik.handleChange}
                   value={formik.values.user}
                 >
-                  {employees.map(({ _id, full_name }: any) => (
+                  {employees.map(({ _id, full_name, avatar }: any) => (
                     <MenuItem key={_id} value={_id}>
-                      {full_name}
+                      <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                        <Avatar alt='user' src={avatar} sx={{ width: '2rem', height: '2rem', m: 2 }} />
+                        <ListItemText primary={full_name} />
+                      </Stack>
                     </MenuItem>
                   ))}
                 </TextField>
@@ -138,6 +174,7 @@ export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, onCancel, on
             <Grid item xs={12}>
               <TextField
                 fullWidth
+                required
                 name='reason'
                 value={formik.values.reason}
                 label='Leave Reason'

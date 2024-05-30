@@ -12,7 +12,7 @@ import { AvatarGroup, Button, Grid, Link, Stack, SvgIcon, TableBody, Tooltip, Ty
 import { Plus } from 'mdi-material-ui'
 import { HolidayModal } from './holiday-modal'
 import { holidaysApi } from 'src/api'
-import { formatDate, formatDayOfWeek } from 'src/utils/helpers'
+import { formatDate, getDayFromDate } from 'src/utils/helpers'
 import { ImageAvatar } from 'src/components/shared'
 import { paths } from 'src/contants/paths'
 import { SquareEditOutline, TrashCanOutline } from 'mdi-material-ui'
@@ -53,6 +53,7 @@ const HolidaysListComponent = () => {
     }
     getHoliday()
     setHolidayModal(false)
+    setHolidayValues(undefined)
   }
 
   const deleteHoliday = async (_id: string) => {
@@ -124,7 +125,7 @@ const HolidaysListComponent = () => {
 
                     return (
                       <TableRow hover role='checkbox' key={index}>
-                        <TableCell align='center'>{formatDayOfWeek(holiday.date)}</TableCell>
+                        <TableCell align='center'>{getDayFromDate(holiday.date)}</TableCell>
                         <TableCell align='center'>{formatDate(holiday.date)}</TableCell>
                         <TableCell align='center'>{holiday.title}</TableCell>
                         {(user?.role === ROLES.Admin || user?.role === ROLES.HR) && (
