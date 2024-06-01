@@ -39,6 +39,8 @@ interface HolidayModalProps {
 }
 
 export const HolidayModal: FC<HolidayModalProps> = ({ modal, modalType, holidayValues, onCancel, onConfirm }) => {
+  const [selectAll, setSelectAll] = useState(false)
+
   const formik = useFormik({
     initialValues: holidayValues
       ? {
@@ -76,6 +78,12 @@ export const HolidayModal: FC<HolidayModalProps> = ({ modal, modalType, holidayV
 
   const getSelectedUsers = () => {
     return employees.filter(employee => formik.values.users.includes(employee._id))
+  }
+
+  const handleSelectAllChange = (event: any) => {
+    const selectedIds = event.target.checked ? employees.map(user => user._id) : []
+    formik.setFieldValue('users', selectedIds)
+    setSelectAll(event.target.checked)
   }
 
   return (
@@ -169,11 +177,19 @@ export const HolidayModal: FC<HolidayModalProps> = ({ modal, modalType, holidayV
                   )
                 }}
                 renderOption={(props, option) => (
-                  <MenuItem key={option._id} value={option._id} sx={{ justifyContent: 'space-between' }} {...props}>
-                    <Checkbox checked={formik.values.users.indexOf(option._id) > -1} />
-                    <Avatar alt='user' src={option.avatar} sx={{ width: '2rem', height: '2rem', m: 2 }} />
-                    <ListItemText primary={option.full_name} />
-                  </MenuItem>
+                  <div>
+                    {option._id === employees[0]._id && (
+                      <MenuItem>
+                        <Checkbox checked={selectAll} onChange={handleSelectAllChange} />
+                        <ListItemText primary='Select All' />
+                      </MenuItem>
+                    )}
+                    <MenuItem key={option._id} value={option} sx={{ justifyContent: 'space-between' }} {...props}>
+                      <Checkbox checked={formik.values.users.includes(option._id)} />
+                      <Avatar alt='user' src={option.avatar} sx={{ width: '2rem', height: '2rem', m: 2 }} />
+                      <ListItemText primary={option.full_name} />
+                    </MenuItem>
+                  </div>
                 )}
                 renderInput={params => (
                   <TextField {...params} required={!formik.values.users.length} label='Users' name='users' />

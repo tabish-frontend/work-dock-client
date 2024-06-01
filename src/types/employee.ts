@@ -17,4 +17,5 @@ export interface Employee {
   account_status: string
   national_identity_number?: number | undefined
   shift?: Shift
+  Today_Status?: string
 }

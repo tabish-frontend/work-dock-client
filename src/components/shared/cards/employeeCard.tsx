@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 
 // ** Types Imports
 import { Employee } from 'src/types'
+import { Box } from '@mui/material'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -68,7 +69,20 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
             paddingTop: ['0 !important', '0 !important', '1.5rem !important'],
             paddingLeft: ['1.5rem !important', '1.5rem !important', '0 !important']
           }}
+          position={'relative'}
         >
+          {/* <Badge
+            badgeContent={employee.Today_Status}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+          > */}
+          <Box position={'absolute'} top={30} right={5} bgcolor={'yellowgreen'} px={2} borderRadius={20}>
+            <Typography variant='subtitle2' color={'white'}>
+              {employee.Today_Status}
+            </Typography>
+          </Box>
           <CardContent>
             <Typography variant='h6' sx={{ marginBottom: 2 }}>
               {employee.full_name}

@@ -41,7 +41,7 @@ export const MyAttendance = ({ filters }: any) => {
           date: currentViewingDate,
           timeIn: null,
           timeOut: null,
-          status: 'Offline'
+          status: 'Absent'
         }
       }
 
