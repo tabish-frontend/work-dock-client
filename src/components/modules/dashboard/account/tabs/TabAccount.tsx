@@ -7,12 +7,9 @@ import Grid from '@mui/material/Grid'
 
 // import Link from '@mui/material/Link'
 // import Alert from '@mui/material/Alert'
-import Select from '@mui/material/Select'
 import { styled } from '@mui/material/styles'
-import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
 
 // import AlertTitle from '@mui/material/AlertTitle'
 // import IconButton from '@mui/material/IconButton'
@@ -30,6 +27,7 @@ import { ImageCrop } from 'src/components/shared'
 import { AuthContextType } from 'src/context/auth'
 import { useAuth } from 'src/hooks'
 import { LoadingButton } from '@mui/lab'
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -54,11 +52,11 @@ export const TabAccount = () => {
     full_name = '',
     username = '',
     designation = '',
-    account_status = '',
+    gender = '',
     company = ''
   } = user || {}
 
-  const userDetails = { avatar, email, full_name, username, designation, account_status, company }
+  const userDetails = { avatar, email, full_name, username, designation, gender, company }
 
   const formik = useFormik({
     initialValues: userDetails,
@@ -146,21 +144,13 @@ export const TabAccount = () => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Designation</InputLabel>
-                <Select
-                  label='Designation'
-                  value={formik.values.designation}
-                  name='designation'
-                  onChange={formik.handleChange}
-                >
-                  <MenuItem value='human resource'>Human Resource</MenuItem>
-                  <MenuItem value='developer'>Developer</MenuItem>
-                  <MenuItem value='designer'>Designer</MenuItem>
-                  <MenuItem value='customer representative'>Customer Representative</MenuItem>
-                  <MenuItem value='wordpress developer'>Wordpress Developer</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+                label='Designation'
+                name='designation'
+                fullWidth
+                value={formik.values.designation}
+                onChange={formik.handleChange}
+              />
             </Grid>
 
             <Grid item xs={12} sm={6}>
@@ -175,17 +165,18 @@ export const TabAccount = () => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Account Status</InputLabel>
-                <Select
-                  label='Account Status'
-                  value={formik.values.account_status}
-                  name='account_status'
+              <FormControl>
+                <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
+                <RadioGroup
+                  row
+                  aria-label='gender'
+                  value={formik.values.gender}
+                  name='gender'
                   onChange={formik.handleChange}
                 >
-                  <MenuItem value='active'>Active</MenuItem>
-                  <MenuItem value='pending'>Pending</MenuItem>
-                </Select>
+                  <FormControlLabel value='Male' label='Male' control={<Radio />} />
+                  <FormControlLabel value='female' label='Female' control={<Radio />} />
+                </RadioGroup>
               </FormControl>
             </Grid>
 

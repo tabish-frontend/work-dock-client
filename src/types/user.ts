@@ -3,7 +3,7 @@ export interface UserAccountDetails {
   full_name: string
   avatar: string
   email: string
-  account_status: string
+  gender: string
   designation: string
   company: string
 }
@@ -15,7 +15,7 @@ export interface UserBasicInformation {
   country: string
   languages: string[]
   qualification: string
-  gender: string
+  natinal_identity_number: number
 }
 
 export interface UserBankDetails {
@@ -40,7 +40,7 @@ export interface User {
   avatar: string
   account_status?: string
   company?: string
-  natinal_identity_number?: string
+  natinal_identity_number?: number
   bank_details?: UserBankDetails
   email: string
   gender?: string

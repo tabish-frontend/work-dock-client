@@ -18,6 +18,14 @@ const EmployeeProfileComponent = () => {
     setEmployeeData(response)
   }
 
+  const handleUpdateEmployee = async (values: any) => {
+    const { username, ...UpdatedValues } = values
+
+    const response = await employeesApi.updateEmployee(username, UpdatedValues)
+
+    setEmployeeData(response)
+  }
+
   useEffect(() => {
     if (username) {
       handleGetEmployee()
@@ -30,7 +38,7 @@ const EmployeeProfileComponent = () => {
         <Typography variant='h5'>Employee Profile</Typography>
       </Grid>
       <Grid item xs={12} sm={7}>
-        <EmployeeDetails employeeData={employeeData} />
+        <EmployeeDetails employeeData={employeeData} UpdateEmployee={handleUpdateEmployee} />
       </Grid>
 
       <Grid item xs={12} sm={5}></Grid>

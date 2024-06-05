@@ -128,79 +128,79 @@ export const ShiftModal: FC<ShiftModalProps> = ({ modal, modalType, shiftValues,
                 </Select>
               </FormControl>
             </Grid>
+          </Grid>
 
-            {formik.values.times.map((input: any, index: number) => {
-              const fieldName = `times[${index}]`
+          {formik.values.times.map((input: any, index: number) => {
+            const fieldName = `times[${index}]`
 
-              return (
-                <>
-                  <Grid item xs={12} sm={3}>
-                    <TimePicker
-                      sx={{ width: '100%' }}
-                      label='Start Time'
-                      value={input.start}
-                      onChange={time => {
-                        formik.setFieldValue(`${fieldName}.start`, time)
+            return (
+              <Grid container spacing={4} p={4} key={index}>
+                <Grid item xs={12} sm={3}>
+                  <TimePicker
+                    sx={{ width: '100%' }}
+                    label='Start Time'
+                    value={input.start}
+                    onChange={time => {
+                      formik.setFieldValue(`${fieldName}.start`, time)
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <TimePicker
+                    sx={{ width: '100%' }}
+                    label='End Time'
+                    value={input.end}
+                    onChange={time => {
+                      formik.setFieldValue(`${fieldName}.end`, time)
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                  <FormControl fullWidth>
+                    <InputLabel>Days</InputLabel>
+                    <Select
+                      multiple
+                      value={input.days}
+                      onChange={(event: SelectChangeEvent<string[]>) => {
+                        formik.setFieldValue(`${fieldName}.days`, event.target.value)
                       }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <TimePicker
-                      sx={{ width: '100%' }}
-                      label='End Time'
-                      value={input.end}
-                      onChange={time => {
-                        formik.setFieldValue(`${fieldName}.end`, time)
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={5}>
-                    <FormControl fullWidth>
-                      <InputLabel>Days</InputLabel>
-                      <Select
-                        multiple
-                        value={input.days}
-                        onChange={(event: SelectChangeEvent<string[]>) => {
-                          formik.setFieldValue(`${fieldName}.days`, event.target.value)
-                        }}
-                        input={<OutlinedInput label='Days' id='select-multiple-language' />}
-                      >
-                        {getShiftDays(formik.values.weekends).map(option => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
+                      input={<OutlinedInput label='Days' id='select-multiple-language' />}
+                    >
+                      {getShiftDays(formik.values.weekends).map(option => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-                  {index > 0 && (
-                    <Grid item xs={12} sm={1} mt={2}>
-                      <IconButton onClick={() => removeShift(index)}>
-                        <SvgIcon>
-                          <MinusBoxOutline color='warning' />
-                        </SvgIcon>
-                      </IconButton>
-                    </Grid>
-                  )}
-                </>
-              )
-            })}
+                {index > 0 && (
+                  <Grid item xs={12} sm={1} mt={2}>
+                    <IconButton onClick={() => removeShift(index)}>
+                      <SvgIcon>
+                        <MinusBoxOutline color='warning' />
+                      </SvgIcon>
+                    </IconButton>
+                  </Grid>
+                )}
+              </Grid>
+            )
+          })}
 
-            <Grid item xs={12} sm={12} ml={4} mt={5}>
-              <Button
-                variant='outlined'
-                size='small'
-                onClick={addShift}
-                startIcon={
-                  <SvgIcon>
-                    <Plus />
-                  </SvgIcon>
-                }
-              >
-                Add More
-              </Button>
-            </Grid>
+          <Grid item xs={12} sm={12} ml={4} mt={5}>
+            <Button
+              variant='outlined'
+              size='small'
+              onClick={addShift}
+              startIcon={
+                <SvgIcon>
+                  <Plus />
+                </SvgIcon>
+              }
+            >
+              Add More
+            </Button>
           </Grid>
 
           <Box

@@ -47,25 +47,24 @@ export const ShiftDetails = ({
 
   return (
     <>
-      <Card>
+      <Card sx={{ position: 'relative' }}>
+        {employeeShift && (
+          <Box sx={{ position: 'absolute', top: 20, right: 15 }}>
+            <SvgIcon
+              sx={{ cursor: 'pointer' }}
+              onClick={() => {
+                setshiftModal(true)
+                setModalType('update')
+              }}
+            >
+              <Pencil />
+            </SvgIcon>
+          </Box>
+        )}
         <CardHeader title={'Shift Details'} />
         <CardContent>
           {employeeShift ? (
             <Grid container spacing={2} mt={3}>
-              <Grid item xs={12} position={'relative'}>
-                <Box sx={{ position: 'absolute', right: 8, transform: 'translateY(-80%)' }}>
-                  <SvgIcon
-                    sx={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      setshiftModal(true)
-                      setModalType('update')
-                    }}
-                  >
-                    <Pencil />
-                  </SvgIcon>
-                </Box>
-              </Grid>
-
               <Grid item xs={12}>
                 <Stack direction={isSmallScreen ? 'column' : 'row'} spacing={3}>
                   <Typography variant='h6' lineHeight={1.3}>

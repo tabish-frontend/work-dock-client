@@ -7,10 +7,7 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  FormControl,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
   Typography
 } from '@mui/material'
@@ -21,6 +18,7 @@ import { employeeInitialValues } from 'src/formilk'
 import { employeesApi } from 'src/api'
 import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
+import { AccountStatus } from 'src/contants/status'
 
 const CreateEmployeeComponent = () => {
   const router = useRouter()
@@ -111,22 +109,13 @@ const CreateEmployeeComponent = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <InputLabel required>Designation</InputLabel>
-                    <Select
-                      label='Designation'
-                      name='designation'
-                      required
-                      onChange={formik.handleChange}
-                      value={formik.values.designation}
-                    >
-                      <MenuItem value='human resource'>Human Resource</MenuItem>
-                      <MenuItem value='software engineer'>Software Engineer</MenuItem>
-                      <MenuItem value='editor'>Editor</MenuItem>
-                      <MenuItem value='maintainer'>Maintainer</MenuItem>
-                      <MenuItem value='subscriber'>Subscriber</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <TextField
+                    label='Designation'
+                    name='designation'
+                    fullWidth
+                    value={formik.values.designation}
+                    onChange={formik.handleChange}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -141,18 +130,20 @@ const CreateEmployeeComponent = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <InputLabel>Account Status</InputLabel>
-                    <Select
-                      label='Account Status'
-                      name='account_status'
-                      value={formik.values.account_status}
-                      onChange={formik.handleChange}
-                    >
-                      <MenuItem value='active'>Active</MenuItem>
-                      <MenuItem value='pending'>Pending</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <TextField
+                    label='Account Status'
+                    fullWidth
+                    select
+                    name='account_status'
+                    value={formik.values.account_status}
+                    onChange={formik.handleChange}
+                  >
+                    {AccountStatus.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Grid>
               </Grid>
             </CardContent>

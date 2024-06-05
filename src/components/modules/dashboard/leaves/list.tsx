@@ -208,6 +208,7 @@ const LeavesListComponent = () => {
                                 }}
                               />
                             </Tooltip>
+
                             <Tooltip title='Delete'>
                               <TrashCanOutline
                                 color='error'

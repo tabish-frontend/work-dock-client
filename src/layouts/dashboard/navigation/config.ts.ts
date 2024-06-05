@@ -1,17 +1,19 @@
 // ** Icon imports
 // import Login from 'mdi-material-ui/Login'
-import Table from 'mdi-material-ui/Table'
+// import Table from 'mdi-material-ui/Table'
+// import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
+
 import CubeOutline from 'mdi-material-ui/CubeOutline'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/layouts/dashboard/types'
 import { paths } from 'src/contants/paths'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
+import { AccountPlusOutline, Table } from 'mdi-material-ui'
 
 const navigation = (): VerticalNavItemsType => {
   const navItems = [
@@ -41,6 +43,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: FormatLetterCase,
       path: paths.leaves
     },
+
     {
       title: 'Salaries',
       icon: AccountPlusOutline,

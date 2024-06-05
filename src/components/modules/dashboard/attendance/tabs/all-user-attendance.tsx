@@ -154,7 +154,7 @@ export const AllUserAttendance = ({ filters }: any) => {
             }
           >
             <span>
-              <ClockTimeThreeOutline sx={{ fontSize: 16 }} color='warning' />
+              <ClockTimeThreeOutline sx={{ fontSize: 18 }} color='warning' />
             </span>
           </Tooltip>
         )
@@ -170,14 +170,14 @@ export const AllUserAttendance = ({ filters }: any) => {
             }
           >
             <span>
-              <Box width={6} height={6} borderRadius='50%' bgcolor={'green'} />
+              <Box width={8} height={8} m={1} borderRadius='50%' bgcolor={'green'} />
             </span>
           </Tooltip>
         )
       }
     } else {
       if (isPastDate(viewingDate, joinDate)) {
-        return <Box width={4} height={4} borderRadius='50%' bgcolor={'#ddd'} />
+        return <Box width={4} height={4} m={2} borderRadius='50%' bgcolor={'#ddd'} />
       } else if (isFutureDate(viewingDate, currentDate)) {
         const shiftDay = shift?.times.find(time => time.days.includes(dayOfDate))
 
@@ -194,13 +194,13 @@ export const AllUserAttendance = ({ filters }: any) => {
               )
             }
           >
-            <Box width={4} height={4} borderRadius='50%' bgcolor={'#ddd'} />
+            <Box width={4} height={4} m={2} borderRadius='50%' bgcolor={'#ddd'} />
           </Tooltip>
         )
       } else {
         return (
           <Tooltip title={`${AttendanceStatus.FULL_DAY_ABSENT.toUpperCase()}`}>
-            <CloseCircleOutline sx={{ fontSize: 16 }} color='error' />
+            <CloseCircleOutline sx={{ fontSize: 18 }} color='error' />
           </Tooltip>
         )
       }
@@ -258,7 +258,7 @@ export const AllUserAttendance = ({ filters }: any) => {
                     )
 
                     return (
-                      <TableCell key={index} sx={{ px: 3, textAlign: 'center' }} align='center'>
+                      <TableCell key={index} sx={{ px: 2, textAlign: 'center' }} align='center'>
                         {renderBadge(
                           dayAttendance,
                           date,

@@ -18,6 +18,12 @@ class EmployeesApi {
 
     return response
   }
+
+  async updateEmployee(username: string, body: object) {
+    const response = await Axios.patch(`/employees/${username}`, body)
+
+    return response.data
+  }
 }
 
 export const employeesApi = new EmployeesApi()

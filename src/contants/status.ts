@@ -44,3 +44,22 @@ export const LeavesTypes = [
     value: Emergency
   }
 ]
+
+export const AccountStatus = [
+  {
+    label: 'Active',
+    value: 'active'
+  },
+  {
+    label: 'Pending',
+    value: 'pending'
+  },
+  {
+    label: 'Auspend',
+    value: 'suspend'
+  },
+  {
+    label: 'Terminate',
+    value: 'terminate'
+  }
+]

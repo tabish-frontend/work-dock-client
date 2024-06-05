@@ -3,17 +3,9 @@ import { forwardRef } from 'react'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Radio from '@mui/material/Radio'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import FormLabel from '@mui/material/FormLabel'
-import InputLabel from '@mui/material/InputLabel'
-import RadioGroup from '@mui/material/RadioGroup'
 import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
@@ -26,6 +18,7 @@ import { getChangedFields } from 'src/utils/helpers'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
 import { LoadingButton } from '@mui/lab'
+import { Countries, Languages } from 'src/contants/list-items'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
@@ -39,7 +32,7 @@ export const TabInfo = () => {
     mobile = 0,
     dob: rawDob = null, // Use an alias to avoid conflict with the dob conversion
     country = '',
-    gender = '',
+    natinal_identity_number = 0,
     qualification = '',
     languages = []
   } = user || {}
@@ -48,7 +41,7 @@ export const TabInfo = () => {
   const dob = rawDob ? new Date(rawDob) : null
 
   // Combine all properties into userInfo object
-  const userInfo = { bio, mobile, dob, country, gender, qualification, languages }
+  const userInfo = { bio, mobile, dob, country, natinal_identity_number, qualification, languages }
 
   const formik = useFormik({
     initialValues: userInfo,
@@ -60,10 +53,6 @@ export const TabInfo = () => {
       helpers.setSubmitting(false)
     }
   })
-
-  const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
-    formik.setFieldValue('languages', event.target.value)
-  }
 
   return (
     <CardContent>
@@ -119,50 +108,54 @@ export const TabInfo = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Country</InputLabel>
-              <Select label='Country' value={formik.values.country} name='country' onChange={formik.handleChange}>
-                <MenuItem value='USA'>USA</MenuItem>
-                <MenuItem value='UK'>UK</MenuItem>
-                <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='pakistan'>Pakistan</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              label='Country'
+              fullWidth
+              select
+              name='country'
+              value={formik.values.country}
+              onChange={formik.handleChange}
+            >
+              {Countries.map(option => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Languages</InputLabel>
-              <Select
-                multiple
-                value={formik.values.languages}
-                onChange={handleSelectChange}
-                input={<OutlinedInput label='Languages' id='select-multiple-language' />}
-              >
-                <MenuItem value='English'>English</MenuItem>
-                <MenuItem value='French'>French</MenuItem>
-                <MenuItem value='Spanish'>Spanish</MenuItem>
-                <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                <MenuItem value='Italian'>Italian</MenuItem>
-                <MenuItem value='German'>German</MenuItem>
-                <MenuItem value='Arabic'>Arabic</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              label='Languages'
+              fullWidth
+              select
+              name='languages'
+              value={formik.values.languages}
+              SelectProps={{
+                multiple: true,
+                value: formik.values.languages,
+                onChange: formik.handleChange
+              }}
+            >
+              {Languages.map(option => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
+
           <Grid item xs={12} sm={6}>
-            <FormControl>
-              <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
-              <RadioGroup
-                row
-                aria-label='gender'
-                value={formik.values.gender}
-                name='gender'
-                onChange={formik.handleChange}
-              >
-                <FormControlLabel value='Male' label='Male' control={<Radio />} />
-                <FormControlLabel value='female' label='Female' control={<Radio />} />
-              </RadioGroup>
-            </FormControl>
+            <TextField
+              fullWidth
+              type='number'
+              label='National Identity'
+              value={formik.values.natinal_identity_number}
+              name='natinal_identity_number'
+              placeholder='(123) 456-7890'
+              onChange={formik.handleChange}
+            />
           </Grid>
+
           <Grid item xs={12}>
             <LoadingButton
               loading={formik.isSubmitting}
