@@ -1,9 +1,7 @@
-import { Avatar, SvgIcon, styled } from '@mui/material'
+import { Avatar, SvgIcon } from '@mui/material'
 
 // import Image from 'next/image'
 import { Account } from 'mdi-material-ui'
-
-const StyledAvatar = styled(Avatar)(({}: any) => ({}))
 
 interface ImageAvatarProps {
   path: string
@@ -14,7 +12,7 @@ interface ImageAvatarProps {
 
 export const ImageAvatar: React.FC<ImageAvatarProps> = ({ path, alt, width, height }) => {
   return (
-    <StyledAvatar sx={{ width, height }} alt='image'>
+    <Avatar sx={{ width, height }} alt='image'>
       {path ? (
         <img src={path} alt={alt} width={width} height={height} />
       ) : (
@@ -22,6 +20,6 @@ export const ImageAvatar: React.FC<ImageAvatarProps> = ({ path, alt, width, heig
           <Account />
         </SvgIcon>
       )}
-    </StyledAvatar>
+    </Avatar>
   )
 }

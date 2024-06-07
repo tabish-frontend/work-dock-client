@@ -8,7 +8,6 @@ import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import Badge from '@mui/material/Badge'
-import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
@@ -20,7 +19,7 @@ import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import { useAuth } from 'src/hooks'
 import { AuthContextType } from 'src/context/auth'
-import { ConfirmationModal } from 'src/components'
+import { ConfirmationModal, ImageAvatar } from 'src/components'
 import { paths } from 'src/contants/paths'
 import { toast } from 'react-toastify'
 
@@ -86,7 +85,7 @@ const UserDropdown = () => {
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={user?.avatar} />
+        <ImageAvatar path={user?.avatar || ''} alt='user image' width={40} height={40} />
       </Badge>
       <Menu
         anchorEl={anchorEl}
@@ -103,7 +102,7 @@ const UserDropdown = () => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt='John Doe' src={user?.avatar} sx={{ width: '3rem', height: '3rem' }} />
+              <ImageAvatar path={user?.avatar || ''} alt='user image' width={40} height={40} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user?.full_name}</Typography>

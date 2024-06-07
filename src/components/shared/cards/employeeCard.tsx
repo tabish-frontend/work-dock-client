@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 // ** Types Imports
 import { Employee } from 'src/types'
 import { Box } from '@mui/material'
+import { ImageAvatar } from '../image-avatar'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -52,13 +53,7 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
               justifyContent: 'center'
             }}
           >
-            <img
-              style={{ borderRadius: '50%' }}
-              width={120}
-              height={120}
-              alt='Apple iPhone 11 Pro'
-              src={employee.avatar || '/images/avatars/1.png'}
-            />
+            <ImageAvatar path={employee.avatar || ''} alt='user image' width={120} height={120} />
           </CardContent>
         </StyledGrid>
         <Grid

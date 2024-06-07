@@ -63,34 +63,56 @@ export const ShiftDetails = ({
         )}
         <CardHeader title={'Shift Details'} />
         <CardContent>
-          {employeeShift ? (
-            <Grid container spacing={2} mt={3}>
+          {employeeShift && (
+            <Grid container spacing={2} mt={2}>
               <Grid item xs={12}>
                 <Stack direction={isSmallScreen ? 'column' : 'row'} spacing={3}>
-                  <Typography variant='h6' lineHeight={1.3}>
+                  <Typography variant='subtitle1' fontWeight={900}>
+                    Shift Type :
+                  </Typography>
+                  <Typography variant='subtitle1'>{employeeShift.shift_type}</Typography>
+                </Stack>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Stack direction={isSmallScreen ? 'column' : 'row'} spacing={3}>
+                  <Typography variant='subtitle1' fontWeight={900}>
                     Weekends :
                   </Typography>
                   <Typography variant='subtitle1'>{employeeShift.weekends.join(', ')}</Typography>
                 </Stack>
               </Grid>
 
-              {employeeShift.times.map((shift, index) => (
-                <Grid item xs={12} mt={2} key={index}>
+              {employeeShift.shift_type === 'Flexible' ? (
+                <Grid item xs={12}>
                   <Stack direction={isSmallScreen ? 'column' : 'row'} spacing={3}>
-                    <Typography variant='subtitle1'>
-                      <b>Start Time :</b> {formatTime(shift.start)}
+                    <Typography variant='subtitle1' fontWeight={900}>
+                      Hours :
                     </Typography>
-                    <Typography variant='subtitle1'>
-                      <b>End Time :</b> {formatTime(shift.end)}
-                    </Typography>
-                    <Typography variant='subtitle1'>
-                      <b>Days :</b> {getAbbreviatedDays(shift.days).join(', ')}
-                    </Typography>
+                    <Typography variant='subtitle1'>{employeeShift.hours}</Typography>
                   </Stack>
                 </Grid>
-              ))}
+              ) : (
+                employeeShift.times.map((shift, index) => (
+                  <Grid item xs={12} key={index}>
+                    <Stack direction={isSmallScreen ? 'column' : 'row'} spacing={3}>
+                      <Typography variant='subtitle1'>
+                        <b>Start Time :</b> {formatTime(shift.start)}
+                      </Typography>
+                      <Typography variant='subtitle1'>
+                        <b>End Time :</b> {formatTime(shift.end)}
+                      </Typography>
+                      <Typography variant='subtitle1'>
+                        <b>Days :</b> {getAbbreviatedDays(shift.days).join(', ')}
+                      </Typography>
+                    </Stack>
+                  </Grid>
+                ))
+              )}
             </Grid>
-          ) : (
+          )}
+
+          {!employeeShift && (
             <Grid container spacing={2} mt={3}>
               <Grid item xs={12} md={6} mx='auto' textAlign='center'>
                 <Typography pb='1rem' variant='subtitle1'>

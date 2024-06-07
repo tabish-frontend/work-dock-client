@@ -14,6 +14,7 @@ import { Cake, Cellphone, Email, MapMarker, Pencil } from 'mdi-material-ui'
 import { formatDob } from 'src/utils/helpers'
 import { useState } from 'react'
 import { UpdateEmployeeModal } from 'src/components/modules/dashboard/employees/update-modal'
+import { ImageAvatar } from '../image-avatar'
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: 'flex',
@@ -47,13 +48,7 @@ export const EmployeeDetails = ({
         <Grid container spacing={6}>
           <StyledGrid item md={4} xs={12}>
             <CardContent>
-              <img
-                style={{ borderRadius: '50%' }}
-                width={137}
-                height={137}
-                alt='Profile'
-                src={employeeData?.avatar || '/images/avatars/1.png'}
-              />
+              <ImageAvatar path={employeeData?.avatar || ''} alt='user image' width={137} height={137} />
               <Typography variant='subtitle1' fontWeight={500} sx={{ my: 2, textAlign: 'center' }}>
                 {employeeData?.username}
               </Typography>

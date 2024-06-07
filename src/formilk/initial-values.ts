@@ -55,6 +55,8 @@ export const leaveInitialValues: Leaves = {
 export const shiftInitialValues: Shift = {
   _id: '',
   user: '',
+  shift_type: 'Fixed',
+  hours: 0,
   times: [
     {
       start: null,

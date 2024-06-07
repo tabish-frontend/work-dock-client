@@ -91,7 +91,7 @@ export const TabAccount = () => {
           <Grid container spacing={7}>
             <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ImgStyled src={formik.values.avatar} alt='Profile Pic' />
+                <ImgStyled src={formik.values.avatar || '/images/avatars/1.png'} alt='Profile Pic' />
                 <Box>
                   <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
                     Upload New Photo
@@ -174,7 +174,7 @@ export const TabAccount = () => {
                   name='gender'
                   onChange={formik.handleChange}
                 >
-                  <FormControlLabel value='Male' label='Male' control={<Radio />} />
+                  <FormControlLabel value='male' label='Male' control={<Radio />} />
                   <FormControlLabel value='female' label='Female' control={<Radio />} />
                 </RadioGroup>
               </FormControl>

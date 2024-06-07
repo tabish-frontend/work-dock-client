@@ -11,14 +11,16 @@ import {
   Select,
   OutlinedInput,
   SelectChangeEvent,
-  SvgIcon
+  SvgIcon,
+  TextField,
+  InputAdornment
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { useFormik } from 'formik'
 import { CloseCircleOutline, MinusBoxOutline, Plus } from 'mdi-material-ui'
 
-import { type FC } from 'react'
+import { useEffect, type FC } from 'react'
 import { shiftInitialValues } from 'src/formilk'
 
 import { weekDays } from 'src/contants/days'
@@ -72,6 +74,15 @@ export const ShiftModal: FC<ShiftModalProps> = ({ modal, modalType, shiftValues,
     formik.setFieldValue('times', updatedShiftDays)
   }
 
+  const handleShiftTypeChange = (e: { target: { value: any } }) => {
+    const newShiftType = e.target.value
+    formik.setValues({ ...shiftInitialValues, _id: formik.values._id, shift_type: newShiftType })
+  }
+
+  useEffect(() => {
+    console.log('formik values', formik.values)
+  }, [formik.values])
+
   const addShift = () => {
     const newShiftValues = {
       start: null,
@@ -110,11 +121,28 @@ export const ShiftModal: FC<ShiftModalProps> = ({ modal, modalType, shiftValues,
           <Divider />
 
           <Grid container spacing={4} p={4}>
-            <Grid item xs={12} mb={3}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label='Shift Type'
+                value={formik.values.shift_type}
+                name='shift_type'
+                select
+                fullWidth
+                required
+                onChange={handleShiftTypeChange}
+              >
+                {['Fixed', 'Flexible'].map(option => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel>weekends</InputLabel>
                 <Select
-                  sx={{ width: '50%' }}
                   multiple
                   value={formik.values.weekends}
                   onChange={handleweekendsChange}
@@ -130,78 +158,96 @@ export const ShiftModal: FC<ShiftModalProps> = ({ modal, modalType, shiftValues,
             </Grid>
           </Grid>
 
-          {formik.values.times.map((input: any, index: number) => {
-            const fieldName = `times[${index}]`
+          {formik.values.shift_type === 'Fixed' ? (
+            <>
+              {formik.values.times.map((input: any, index: number) => {
+                const fieldName = `times[${index}]`
 
-            return (
-              <Grid container spacing={4} p={4} key={index}>
-                <Grid item xs={12} sm={3}>
-                  <TimePicker
-                    sx={{ width: '100%' }}
-                    label='Start Time'
-                    value={input.start}
-                    onChange={time => {
-                      formik.setFieldValue(`${fieldName}.start`, time)
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={3}>
-                  <TimePicker
-                    sx={{ width: '100%' }}
-                    label='End Time'
-                    value={input.end}
-                    onChange={time => {
-                      formik.setFieldValue(`${fieldName}.end`, time)
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={5}>
-                  <FormControl fullWidth>
-                    <InputLabel>Days</InputLabel>
-                    <Select
-                      multiple
-                      value={input.days}
-                      onChange={(event: SelectChangeEvent<string[]>) => {
-                        formik.setFieldValue(`${fieldName}.days`, event.target.value)
-                      }}
-                      input={<OutlinedInput label='Days' id='select-multiple-language' />}
-                    >
-                      {getShiftDays(formik.values.weekends).map(option => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                return (
+                  <Grid container spacing={4} p={4} key={index}>
+                    <Grid item xs={12} sm={3}>
+                      <TimePicker
+                        sx={{ width: '100%' }}
+                        label='Start Time'
+                        value={input.start}
+                        onChange={time => {
+                          formik.setFieldValue(`${fieldName}.start`, time)
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <TimePicker
+                        sx={{ width: '100%' }}
+                        label='End Time'
+                        value={input.end}
+                        onChange={time => {
+                          formik.setFieldValue(`${fieldName}.end`, time)
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={5}>
+                      <FormControl fullWidth>
+                        <InputLabel>Days</InputLabel>
+                        <Select
+                          multiple
+                          value={input.days}
+                          onChange={(event: SelectChangeEvent<string[]>) => {
+                            formik.setFieldValue(`${fieldName}.days`, event.target.value)
+                          }}
+                          input={<OutlinedInput label='Days' id='select-multiple-language' />}
+                        >
+                          {getShiftDays(formik.values.weekends).map(option => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
 
-                {index > 0 && (
-                  <Grid item xs={12} sm={1} mt={2}>
-                    <IconButton onClick={() => removeShift(index)}>
-                      <SvgIcon>
-                        <MinusBoxOutline color='warning' />
-                      </SvgIcon>
-                    </IconButton>
+                    {index > 0 && (
+                      <Grid item xs={12} sm={1} mt={2}>
+                        <IconButton onClick={() => removeShift(index)}>
+                          <SvgIcon>
+                            <MinusBoxOutline color='warning' />
+                          </SvgIcon>
+                        </IconButton>
+                      </Grid>
+                    )}
                   </Grid>
-                )}
-              </Grid>
-            )
-          })}
+                )
+              })}
 
-          <Grid item xs={12} sm={12} ml={4} mt={5}>
-            <Button
-              variant='outlined'
-              size='small'
-              onClick={addShift}
-              startIcon={
-                <SvgIcon>
-                  <Plus />
-                </SvgIcon>
-              }
-            >
-              Add More
-            </Button>
-          </Grid>
+              <Grid item xs={12} sm={12} ml={4} mt={5}>
+                <Button
+                  variant='outlined'
+                  size='small'
+                  onClick={addShift}
+                  startIcon={
+                    <SvgIcon>
+                      <Plus />
+                    </SvgIcon>
+                  }
+                >
+                  Add More
+                </Button>
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={12} sm={6} ml={4} mt={5}>
+              <TextField
+                type='number'
+                label='Hours Per Day'
+                name='hours'
+                onChange={formik.handleChange}
+                value={formik.values.hours}
+                sx={{ width: 260 }}
+                InputProps={{
+                  endAdornment: <InputAdornment position='end'>/day</InputAdornment>
+                }}
+              />
+            </Grid>
+          )}
 
           <Box
             sx={{

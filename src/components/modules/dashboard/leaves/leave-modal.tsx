@@ -119,8 +119,12 @@ export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, leaveValues,
                 sx={{ width: '100%' }}
                 value={formik.values.startDate}
                 onChange={date => {
-                  formik.setFieldValue('startDate', date)
-                  formik.setFieldValue('endDate', date)
+                  if (date) {
+                    // Set the time to 11 PM
+                    date.setHours(23, 0, 0, 0)
+                    formik.setFieldValue('startDate', date)
+                    formik.setFieldValue('endDate', date)
+                  }
                 }}
               />
             </Grid>
@@ -134,7 +138,11 @@ export const LeaveModal: FC<LeaveModalProps> = ({ modal, modalType, leaveValues,
                 views={['year', 'month', 'day']}
                 value={formik.values.endDate}
                 onChange={date => {
-                  formik.setFieldValue('endDate', date)
+                  if (date) {
+                    // Set the time to 11 PM
+                    date.setHours(23, 0, 0, 0)
+                    formik.setFieldValue('endDate', date)
+                  }
                 }}
               />
             </Grid>

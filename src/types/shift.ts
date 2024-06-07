@@ -7,6 +7,8 @@ interface timeDetails {
 export interface Shift {
   _id?: string
   user: string
+  shift_type: string
+  hours: number
   times: timeDetails[]
   weekends: string[]
 }
